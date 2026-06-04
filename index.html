@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Commandes · Vinted Stats Tracker</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">Vinted Stats</a>
+        <nav class="nav" data-nav></nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Commandes en cours</h1>
+
+      <form class="settings-panel" data-settings-form>
+        <input name="apiUrl" type="url" placeholder="URL API serveur">
+        <input name="adminToken" type="password" placeholder="Clé admin">
+        <button type="submit">Enregistrer</button>
+      </form>
+
+      <section class="summary-strip" data-orders-summary></section>
+
+      <section class="toolbar">
+        <input data-search type="search" placeholder="Rechercher">
+        <select data-status-filter>
+          <option value="">Tous les statuts</option>
+          <option value="todo">Pas encore préparé</option>
+          <option value="prepared">Préparé</option>
+          <option value="sent">Envoyé</option>
+          <option value="finished">Terminé</option>
+          <option value="archived">Archivé</option>
+        </select>
+        <select data-account-filter>
+          <option value="">Tous les comptes</option>
+        </select>
+        <label class="checkbox-line">
+          <input data-show-finished type="checkbox">
+          Terminées
+        </label>
+        <button class="secondary" data-refresh type="button">Rafraîchir</button>
+        <button data-poll type="button">Vérifier Gmail</button>
+      </section>
+
+      <section class="orders-list" data-orders-list></section>
+    </main>
+
+    <div class="modal-backdrop" data-merge-modal hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="merge-title">
+        <div class="modal-header">
+          <h2 id="merge-title">Fusionner la vente</h2>
+          <button class="secondary" type="button" data-close-modal>Fermer</button>
+        </div>
+        <form data-merge-form>
+          <input data-group-search type="search" placeholder="Rechercher un groupe">
+          <select data-group-select></select>
+          <input data-new-group-name type="text" placeholder="Nouveau groupe">
+          <div class="modal-actions">
+            <button class="secondary" type="button" data-close-modal>Annuler</button>
+            <button type="submit">Fusionner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" data-toast></div>
+    <script type="module" src="assets/js/orders.js"></script>
+  </body>
+</html>

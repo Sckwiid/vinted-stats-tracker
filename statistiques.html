@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Statistiques · Vinted Stats Tracker</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">Vinted Stats</a>
+        <nav class="nav" data-nav></nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Statistiques</h1>
+
+      <form class="settings-panel" data-settings-form>
+        <input name="apiUrl" type="url" placeholder="URL API serveur">
+        <input name="adminToken" type="password" placeholder="Clé admin">
+        <button type="submit">Enregistrer</button>
+      </form>
+
+      <section class="summary-strip" data-stats-summary></section>
+
+      <section class="toolbar">
+        <select data-sort>
+          <option value="count">Nombre de ventes</option>
+          <option value="average">Prix moyen</option>
+          <option value="total">Total encaissé</option>
+          <option value="lastSale">Dernière vente</option>
+        </select>
+      </section>
+
+      <section class="stats-list" data-stats-list></section>
+    </main>
+
+    <div class="toast" data-toast></div>
+    <script type="module" src="assets/js/stats.js"></script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Articles · Vinted Stats Tracker</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">Vinted Stats</a>
+        <nav class="nav" data-nav></nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Articles et groupes</h1>
+
+      <form class="settings-panel" data-settings-form>
+        <input name="apiUrl" type="url" placeholder="URL API serveur">
+        <input name="adminToken" type="password" placeholder="Clé admin">
+        <button type="submit">Enregistrer</button>
+      </form>
+
+      <section class="toolbar">
+        <input data-group-search type="search" placeholder="Rechercher un groupe">
+      </section>
+
+      <section class="groups-list" data-groups-list></section>
+
+      <div class="section-heading">
+        <h2>Ventes non groupées</h2>
+      </div>
+      <section class="ungrouped-list" data-ungrouped-list></section>
+    </main>
+
+    <div class="toast" data-toast></div>
+    <script type="module" src="assets/js/articles.js"></script>
+  </body>
+</html>
