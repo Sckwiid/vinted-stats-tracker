@@ -25,6 +25,20 @@
 
       <section class="summary-strip" data-stats-summary></section>
 
+      <section class="chart-panel">
+        <div class="chart-header">
+          <div>
+            <h2 data-chart-title>Heures de vente</h2>
+            <p class="muted" data-chart-subtitle>Répartition des ventes par jour et heure, basée sur la date du mail.</p>
+          </div>
+          <div class="segmented-control" data-chart-tabs>
+            <button type="button" class="active" data-chart-mode="time">Ventes</button>
+            <button type="button" data-chart-mode="articles">Articles</button>
+          </div>
+        </div>
+        <div data-chart></div>
+      </section>
+
       <section class="toolbar">
         <select data-sort>
           <option value="count">Nombre de ventes</option>

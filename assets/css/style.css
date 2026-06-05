@@ -396,6 +396,162 @@ h3 {
   min-height: 132px;
 }
 
+.chart-panel {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.chart-header h2 {
+  font-size: 1.2rem;
+}
+
+.chart-header p {
+  margin-top: 0.25rem;
+}
+
+.segmented-control {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #eef2f7;
+  padding: 0.2rem;
+}
+
+.segmented-control button {
+  background: transparent;
+  color: var(--muted);
+  padding: 0.55rem 0.75rem;
+}
+
+.segmented-control button.active {
+  background: #fff;
+  color: var(--brand-dark);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+}
+
+.heatmap-wrap {
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: 42px repeat(24, minmax(28px, 1fr));
+  gap: 0.28rem;
+  min-width: 820px;
+  align-items: center;
+}
+
+.heatmap-hour,
+.heatmap-day {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.heatmap-day {
+  text-align: right;
+  padding-right: 0.35rem;
+}
+
+.heatmap-cell {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--brand) var(--intensity), #eef2f7);
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.heatmap-cell.hot {
+  color: #fff;
+}
+
+.chart-note {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.ranking-chart {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.ranking-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.1fr) minmax(160px, 1.6fr) 86px;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.ranking-label {
+  min-width: 0;
+}
+
+.ranking-label strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking-label span,
+.ranking-value span {
+  color: var(--muted);
+  display: block;
+  font-size: 0.82rem;
+  margin-top: 0.15rem;
+}
+
+.ranking-bar-track {
+  height: 0.8rem;
+  border-radius: 999px;
+  background: #e8edf4;
+  overflow: hidden;
+}
+
+.ranking-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand);
+}
+
+.ranking-value {
+  text-align: right;
+}
+
+.sale-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.sale-dates span {
+  border-radius: 999px;
+  background: #eef2f7;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.5rem;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -538,6 +694,7 @@ h3 {
 
   .sale-heading,
   .article-heading,
+  .chart-header,
   .section-heading {
     flex-direction: column;
     align-items: stretch;
@@ -551,5 +708,21 @@ h3 {
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .segmented-control {
+    width: 100%;
+  }
+
+  .segmented-control button {
+    flex: 1;
+  }
+
+  .ranking-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-value {
+    text-align: left;
   }
 }
