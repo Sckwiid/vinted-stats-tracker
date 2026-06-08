@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_9551a6b2e7eb",
+    "sourceMessageId": "<0102019ea775f2e2-9dafd8d6-bee5-4c47-a22d-af9cb1116bb6-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "emilielinda39",
+    "rawTitle": "Lot 2 articles",
+    "normalizedTitle": "lot 2 articles",
+    "priceCents": 1800,
+    "priceFormatted": "18,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-08T13:39:45.000Z",
+    "createdAt": "2026-06-08T13:40:23.739Z",
+    "updatedAt": "2026-06-08T13:40:23.858Z"
+  },
+  {
     "id": "sale_be917eb86fe9",
     "sourceMessageId": "<0102019ea447833c-5b9a6927-fb81-4b91-bc1a-f13b4070587c-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
