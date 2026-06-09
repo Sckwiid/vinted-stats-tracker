@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_10f10af1eb5c",
+    "sourceMessageId": "<0102019eac7b083f-21cba2fa-0953-4ce2-845a-1a8f23f0bbbd-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "tomiisjajwj",
+    "rawTitle": "Minijupe short blanche Neuf pour Femme",
+    "normalizedTitle": "minijupe short blanche neuf pour femme",
+    "priceCents": 1000,
+    "priceFormatted": "10,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-09T13:03:24.000Z",
+    "createdAt": "2026-06-09T13:05:38.725Z",
+    "updatedAt": "2026-06-09T13:05:38.740Z"
+  },
+  {
     "id": "sale_9551a6b2e7eb",
     "sourceMessageId": "<0102019ea775f2e2-9dafd8d6-bee5-4c47-a22d-af9cb1116bb6-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
