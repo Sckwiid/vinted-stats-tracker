@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_4f136b9c9ec7",
+    "sourceMessageId": "<0102019ebd44c037-76c013ee-45e7-4b27-831e-f3b3ddf849b3-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "audreyyy_lt",
+    "rawTitle": "Short Blanc d'Été Texturé Taille Élastique pour Femme - Neuf",
+    "normalizedTitle": "short blanc d ete texture taille elastique pour femme neuf",
+    "priceCents": 720,
+    "priceFormatted": "7,20 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-12T19:17:40.000Z",
+    "createdAt": "2026-06-12T19:19:52.896Z",
+    "updatedAt": "2026-06-12T19:19:52.910Z"
+  },
+  {
     "id": "sale_b5e654c3d029",
     "sourceMessageId": "<0102019ebc6ef30c-5e767f97-cb68-473d-ba55-b6ce08d96094-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
