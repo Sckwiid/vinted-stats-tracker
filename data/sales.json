@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_b2e540d365c0",
+    "sourceMessageId": "<0102019eba9e7bd5-a52c8ca7-5d9a-440b-b521-a9681faaa0a0-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "rockchlo42",
+    "rawTitle": "Lot 3 articles",
+    "normalizedTitle": "lot 3 articles",
+    "priceCents": 3000,
+    "priceFormatted": "30,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-12T06:56:49.000Z",
+    "createdAt": "2026-06-12T06:57:41.668Z",
+    "updatedAt": "2026-06-12T06:57:41.685Z"
+  },
+  {
     "id": "sale_5ee061ee0aca",
     "sourceMessageId": "<0102019eb63b3ad5-e8458d27-fbcc-483b-8e22-e9e32165ac37-000000@eu-west-1.amazonses.com>",
     "accountName": "emma_lvbc",
