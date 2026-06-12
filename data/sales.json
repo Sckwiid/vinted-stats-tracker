@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_d12543c9973b",
+    "sourceMessageId": "<0102019ebbb78da2-9a3b21e6-cbf6-436a-89eb-e4d4c34eec92-000000@eu-west-1.amazonses.com>",
+    "accountName": "emma_lvbc",
+    "buyerUsername": "aislingh32",
+    "rawTitle": "Robe Bleu Clair d’Été Sans Manches pour Femme - Neuf",
+    "normalizedTitle": "robe bleu clair d ete sans manches pour femme neuf",
+    "priceCents": 1400,
+    "priceFormatted": "14,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-12T12:03:49.000Z",
+    "createdAt": "2026-06-12T12:05:40.394Z",
+    "updatedAt": "2026-06-12T12:05:40.441Z"
+  },
+  {
     "id": "sale_b2e540d365c0",
     "sourceMessageId": "<0102019eba9e7bd5-a52c8ca7-5d9a-440b-b521-a9681faaa0a0-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
