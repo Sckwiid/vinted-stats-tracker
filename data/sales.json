@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_b5e654c3d029",
+    "sourceMessageId": "<0102019ebc6ef30c-5e767f97-cb68-473d-ba55-b6ce08d96094-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "ainulyndale_petite",
+    "rawTitle": "Lot 3 articles",
+    "normalizedTitle": "lot 3 articles",
+    "priceCents": 2000,
+    "priceFormatted": "20,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-12T15:24:08.000Z",
+    "createdAt": "2026-06-12T15:25:43.497Z",
+    "updatedAt": "2026-06-12T15:25:43.516Z"
+  },
+  {
     "id": "sale_d12543c9973b",
     "sourceMessageId": "<0102019ebbb78da2-9a3b21e6-cbf6-436a-89eb-e4d4c34eec92-000000@eu-west-1.amazonses.com>",
     "accountName": "emma_lvbc",
