@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_19f4a043877a",
+    "sourceMessageId": "<0102019ebda10fb2-46796265-3d89-4514-8b6f-6cd275f264fd-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "charlotte_3431",
+    "rawTitle": "Short d’été bleu clair neuf pour femme",
+    "normalizedTitle": "short d ete bleu clair neuf pour femme",
+    "priceCents": 800,
+    "priceFormatted": "8,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-12T20:58:29.000Z",
+    "createdAt": "2026-06-12T20:59:40.641Z",
+    "updatedAt": "2026-06-12T20:59:40.656Z"
+  },
+  {
     "id": "sale_4f136b9c9ec7",
     "sourceMessageId": "<0102019ebd44c037-76c013ee-45e7-4b27-831e-f3b3ddf849b3-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
