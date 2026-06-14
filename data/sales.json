@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_ab1c188877c4",
+    "sourceMessageId": "<0102019ec7e6fe9c-253e0f27-2e05-490c-9072-4c8823d0e030-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "zoeg439",
+    "rawTitle": "Crop Top Rouge d'Été Neuf pour Femme",
+    "normalizedTitle": "crop top rouge d ete neuf pour femme",
+    "priceCents": 800,
+    "priceFormatted": "8,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-14T20:51:04.000Z",
+    "createdAt": "2026-06-14T20:51:58.780Z",
+    "updatedAt": "2026-06-14T20:51:58.794Z"
+  },
+  {
     "id": "sale_bf3024ee48da",
     "sourceMessageId": "<0102019ec6b13ce6-e2ca20f2-da91-40c9-b448-9ac17edc8607-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
