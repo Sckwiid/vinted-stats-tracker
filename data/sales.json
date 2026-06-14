@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_bf3024ee48da",
+    "sourceMessageId": "<0102019ec6b13ce6-e2ca20f2-da91-40c9-b448-9ac17edc8607-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "joanneangelina",
+    "rawTitle": "Crop top marron neuf à bretelles croisées pour femme",
+    "normalizedTitle": "crop top marron neuf a bretelles croisees pour femme",
+    "priceCents": 500,
+    "priceFormatted": "5,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-14T15:12:44.000Z",
+    "createdAt": "2026-06-14T15:13:45.209Z",
+    "updatedAt": "2026-06-14T15:13:45.223Z"
+  },
+  {
     "id": "sale_2f77d2227335",
     "sourceMessageId": "<0102019ec0906f75-c0658c68-fee7-4dec-b2bd-750cebf5cb71-000000@eu-west-1.amazonses.com>",
     "accountName": "emma_lvbc",
