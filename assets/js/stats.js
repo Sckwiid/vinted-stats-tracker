@@ -9,10 +9,33 @@ import {
   setupShell
 } from './common.js';
 
+const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
+
+function loadPurchasePrices() {
+  try {
+    return JSON.parse(localStorage.getItem(PURCHASE_PRICES_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+const PERIODS = [
+  { label: '1j',   days: 1 },
+  { label: '7j',   days: 7 },
+  { label: '14j',  days: 14 },
+  { label: '1m',   days: 30 },
+  { label: '2m',   days: 60 },
+  { label: '3m',   days: 90 },
+  { label: '6m',   days: 180 },
+  { label: '1an',  days: 365 },
+  { label: 'Tout', days: null }
+];
+
 const state = {
   sales: [],
   groups: [],
-  chartMode: 'time'
+  chartMode: 'time',
+  periodDays: null
 };
 
 const elements = {
@@ -22,7 +45,8 @@ const elements = {
   chartTabs: document.querySelector('[data-chart-tabs]'),
   list: document.querySelector('[data-stats-list]'),
   summary: document.querySelector('[data-stats-summary]'),
-  sort: document.querySelector('[data-sort]')
+  sort: document.querySelector('[data-sort]'),
+  periodFilter: document.querySelector('[data-period-filter]')
 };
 
 setupShell('stats');
@@ -39,11 +63,25 @@ function mondayFirstDayIndex(date) {
   return (date.getDay() + 6) % 7;
 }
 
+function filteredSales() {
+  if (!state.periodDays) return state.sales;
+  const cutoff = Date.now() - state.periodDays * 24 * 60 * 60 * 1000;
+  return state.sales.filter((sale) => {
+    const date = localSaleDate(sale);
+    return date && date.getTime() >= cutoff;
+  });
+}
+
 function summarizeSales(label, sales, group = null) {
   const prices = sales.map((sale) => Number(sale.priceCents || 0));
   const total = prices.reduce((sum, price) => sum + price, 0);
   const lastSale = [...sales].sort((a, b) => new Date(b.soldAt) - new Date(a.soldAt))[0] || null;
   const accounts = [...new Set(sales.map((sale) => sale.accountName).filter(Boolean))];
+
+  const purchasePrices = loadPurchasePrices();
+  const groupKey = group?.id || label;
+  const purchaseCents = Math.round((Number(purchasePrices[groupKey]) || 0) * 100);
+  const profit = total - purchaseCents;
 
   return {
     id: group?.id || 'ungrouped',
@@ -57,6 +95,8 @@ function summarizeSales(label, sales, group = null) {
     lastSale,
     accounts,
     imagePath: group?.mainImagePath || lastSale?.imagePath || null,
+    purchaseCents,
+    profit,
     saleDates: [...sales]
       .sort((a, b) => new Date(b.soldAt) - new Date(a.soldAt))
       .map((sale) => sale.soldAt)
@@ -64,12 +104,13 @@ function summarizeSales(label, sales, group = null) {
 }
 
 function buildSummaries() {
+  const sales = filteredSales();
   const summaries = state.groups.map((group) => {
-    const sales = state.sales.filter((sale) => sale.groupId === group.id);
-    return summarizeSales(group.name, sales, group);
+    const groupSales = sales.filter((sale) => sale.groupId === group.id);
+    return summarizeSales(group.name, groupSales, group);
   });
 
-  const ungrouped = state.sales.filter((sale) => !sale.groupId);
+  const ungrouped = sales.filter((sale) => !sale.groupId);
   if (ungrouped.length > 0) {
     summaries.push(summarizeSales('Non groupées', ungrouped));
   }
@@ -89,23 +130,44 @@ function sortSummaries(summaries) {
   return sorted;
 }
 
+function renderPeriodFilter() {
+  elements.periodFilter.innerHTML = PERIODS.map(({ label, days }) => `
+    <button type="button"
+      class="period-btn ${state.periodDays === days ? 'active' : ''}"
+      data-period="${days === null ? 'null' : days}">
+      ${label}
+    </button>
+  `).join('');
+}
+
 function renderSummary() {
-  const prices = state.sales.map((sale) => Number(sale.priceCents || 0));
+  const sales = filteredSales();
+  const prices = sales.map((sale) => Number(sale.priceCents || 0));
   const total = prices.reduce((sum, price) => sum + price, 0);
-  const finished = state.sales.filter((sale) => sale.status === 'finished');
+  const finished = sales.filter((sale) => sale.status === 'finished');
+
+  const purchasePrices = loadPurchasePrices();
+  const totalPurchase = state.groups.reduce((sum, group) => {
+    const hasSales = sales.some((s) => s.groupId === group.id);
+    if (!hasSales) return sum;
+    return sum + Math.round((Number(purchasePrices[group.id]) || 0) * 100);
+  }, 0);
+  const profit = total - totalPurchase;
 
   elements.summary.innerHTML = `
-    <div><strong>${state.sales.length}</strong><span>ventes</span></div>
+    <div><strong>${sales.length}</strong><span>ventes</span></div>
     <div><strong>${formatMoney(total)}</strong><span>encaissé</span></div>
-    <div><strong>${formatMoney(state.sales.length ? total / state.sales.length : 0)}</strong><span>prix moyen</span></div>
+    <div><strong>${formatMoney(sales.length ? total / sales.length : 0)}</strong><span>prix moyen</span></div>
+    <div><strong>${formatMoney(profit)}</strong><span>bénéfice</span></div>
     <div><strong>${finished.length}</strong><span>terminées</span></div>
   `;
 }
 
 function renderTimeHeatmap() {
+  const sales = filteredSales();
   const counts = Array.from({ length: 7 }, () => Array.from({ length: 24 }, () => 0));
 
-  for (const sale of state.sales) {
+  for (const sale of sales) {
     const date = localSaleDate(sale);
     if (!date) continue;
     counts[mondayFirstDayIndex(date)][date.getHours()] += 1;
@@ -125,7 +187,7 @@ function renderTimeHeatmap() {
   elements.chartTitle.textContent = 'Heures de vente';
   elements.chartSubtitle.textContent = 'Répartition par jour et heure, basée sur la date du mail reçu.';
 
-  if (state.sales.length === 0) {
+  if (sales.length === 0) {
     elements.chart.innerHTML = '<div class="empty-state">Aucune vente à analyser.</div>';
     return;
   }
@@ -169,10 +231,11 @@ function renderTimeHeatmap() {
 }
 
 function articleRankingItems() {
+  const sales = filteredSales();
   const groupsById = new Map(state.groups.map((group) => [group.id, group]));
   const items = new Map();
 
-  for (const sale of state.sales) {
+  for (const sale of sales) {
     const group = sale.groupId ? groupsById.get(sale.groupId) : null;
     const key = group ? group.id : `sale:${sale.normalizedTitle || sale.rawTitle}`;
     const item = items.get(key) || {
@@ -251,6 +314,7 @@ function renderChart() {
 }
 
 function renderStats() {
+  renderPeriodFilter();
   renderSummary();
   renderChart();
   const summaries = sortSummaries(buildSummaries());
@@ -263,6 +327,10 @@ function renderStats() {
   elements.list.innerHTML = summaries
     .map((summary) => {
       const imageSale = { imagePath: summary.imagePath, rawTitle: summary.label };
+      const profitClass = summary.profit >= 0 ? 'profit-positive' : 'profit-negative';
+      const profitLabel = summary.purchaseCents > 0
+        ? `<span class="${profitClass}">Bénéfice <strong>${formatMoney(summary.profit)}</strong></span>`
+        : `<span class="muted">Bénéfice <strong>—</strong></span>`;
       return `
         <article class="stats-card">
           <div class="group-image">${saleImageMarkup(imageSale, summary.label)}</div>
@@ -276,6 +344,7 @@ function renderStats() {
               <span>Max <strong>${formatMoney(summary.max)}</strong></span>
               <span>Dernière <strong>${summary.lastSale ? formatDate(summary.lastSale.soldAt) : '-'}</strong></span>
             </div>
+            <div class="profit-line">${profitLabel}</div>
             <div class="sale-dates">
               ${summary.saleDates
                 .slice(0, 5)
@@ -305,8 +374,15 @@ elements.sort.addEventListener('change', renderStats);
 elements.chartTabs.addEventListener('click', (event) => {
   const button = event.target.closest('[data-chart-mode]');
   if (!button) return;
-
   state.chartMode = button.dataset.chartMode;
   renderChart();
 });
+elements.periodFilter.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-period]');
+  if (!button) return;
+  const raw = button.dataset.period;
+  state.periodDays = raw === 'null' ? null : Number(raw);
+  renderStats();
+});
+
 loadAndRender();

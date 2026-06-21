@@ -14,6 +14,27 @@ import {
 } from './common.js';
 import { mergeSale, renameGroup } from './api.js';
 
+const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
+
+function loadPurchasePrices() {
+  try {
+    return JSON.parse(localStorage.getItem(PURCHASE_PRICES_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function savePurchasePrice(groupId, value) {
+  const prices = loadPurchasePrices();
+  const num = parseFloat(String(value).replace(',', '.'));
+  if (Number.isNaN(num) || num < 0) {
+    delete prices[groupId];
+  } else {
+    prices[groupId] = num;
+  }
+  localStorage.setItem(PURCHASE_PRICES_KEY, JSON.stringify(prices));
+}
+
 const state = {
   sales: [],
   groups: []
@@ -35,6 +56,7 @@ function filteredGroups() {
 
 function renderGroups() {
   const groups = filteredGroups();
+  const purchasePrices = loadPurchasePrices();
 
   if (groups.length === 0) {
     elements.list.innerHTML = '<div class="empty-state">Aucun groupe à afficher.</div>';
@@ -46,6 +68,14 @@ function renderGroups() {
       const sales = salesForGroup(state.sales, group.id);
       const total = sales.reduce((sum, sale) => sum + Number(sale.priceCents || 0), 0);
       const imageSale = { imagePath: group.mainImagePath || sales[0]?.imagePath, rawTitle: group.name };
+      const purchaseVal = purchasePrices[group.id] ?? '';
+      const purchaseCents = Math.round((Number(purchaseVal) || 0) * 100);
+      const profit = total - purchaseCents;
+      const profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
+      const profitHtml = purchaseVal !== ''
+        ? `<span class="${profitClass}">Bénéfice : <strong>${formatMoney(profit)}</strong></span>`
+        : '';
+
       const saleRows = sales
         .slice(0, 8)
         .map((sale) => `
@@ -66,10 +96,28 @@ function renderGroups() {
               <div>
                 <h2>${escapeHtml(group.name)}</h2>
                 <p>${sales.length} vente(s) · ${formatMoney(total)}</p>
+                ${profitHtml}
               </div>
               <form class="inline-form" data-rename-form="${escapeHtml(group.id)}">
                 <input name="name" value="${escapeHtml(group.name)}" aria-label="Nom du groupe">
                 <button type="submit">Renommer</button>
+              </form>
+            </div>
+            <div class="purchase-row">
+              <form class="purchase-form" data-purchase-form="${escapeHtml(group.id)}">
+                <label>
+                  Prix d'achat (€)
+                  <input
+                    name="purchasePrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    value="${escapeHtml(String(purchaseVal))}"
+                    aria-label="Prix d'achat pour ${escapeHtml(group.name)}"
+                  >
+                </label>
+                <button type="submit">Enregistrer</button>
               </form>
             </div>
             <ul class="compact-list">${saleRows || '<li>Aucune vente associée</li>'}</ul>
@@ -131,20 +179,31 @@ async function loadAndRender() {
 elements.search.addEventListener('input', renderGroups);
 
 elements.list.addEventListener('submit', async (event) => {
-  const form = event.target.closest('[data-rename-form]');
-  if (!form) return;
-  event.preventDefault();
-
-  const groupId = form.dataset.renameForm;
-  const name = form.elements.name.value.trim();
-  try {
-    const result = await renameGroup(groupId, name);
-    const group = state.groups.find((item) => item.id === groupId);
-    if (group) Object.assign(group, result.group);
+  const purchaseForm = event.target.closest('[data-purchase-form]');
+  if (purchaseForm) {
+    event.preventDefault();
+    const groupId = purchaseForm.dataset.purchaseForm;
+    const value = purchaseForm.elements.purchasePrice.value;
+    savePurchasePrice(groupId, value);
     renderGroups();
-    showToast('Groupe renommé');
-  } catch (error) {
-    showToast(error.message, 'error');
+    showToast('Prix d\'achat enregistré');
+    return;
+  }
+
+  const renameForm = event.target.closest('[data-rename-form]');
+  if (renameForm) {
+    event.preventDefault();
+    const groupId = renameForm.dataset.renameForm;
+    const name = renameForm.elements.name.value.trim();
+    try {
+      const result = await renameGroup(groupId, name);
+      const group = state.groups.find((item) => item.id === groupId);
+      if (group) Object.assign(group, result.group);
+      renderGroups();
+      showToast('Groupe renommé');
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
   }
 });
 
