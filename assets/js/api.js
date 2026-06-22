@@ -1,3 +1,5 @@
+import { apiRequest } from './common.js?v=20260622-stock-matching';
+
 import { apiRequest } from './common.js?v=20260622-stocks-nav';
 
 export function pollNow() {

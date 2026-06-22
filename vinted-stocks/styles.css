@@ -104,7 +104,8 @@ h3 {
 input,
 select,
 textarea,
-button {
+button,
+a.btn {
   font: inherit;
 }
 
@@ -132,11 +133,15 @@ textarea {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   border-radius: 6px;
   padding: 0.72rem 0.9rem;
   cursor: pointer;
   font-weight: 700;
+  text-decoration: none;
 }
 
 .btn-main {

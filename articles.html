@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Articles · Vinted Stats Tracker</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260622-stock-matching">
   </head>
   <body>
     <header class="app-header">
@@ -25,7 +25,10 @@
 
       <section class="toolbar">
         <input data-group-search type="search" placeholder="Rechercher un groupe">
+        <button class="secondary" data-stock-review-toggle type="button">Vérifier les correspondances stock</button>
       </section>
+
+      <section class="stock-review-panel" data-stock-review hidden></section>
 
       <section class="groups-list" data-groups-list></section>
 
@@ -36,6 +39,8 @@
     </main>
 
     <div class="toast" data-toast></div>
+    <script type="module" src="assets/js/articles.js?v=20260622-stock-matching"></script>
+
     <script type="module" src="assets/js/articles.js?v=20260622-stocks-nav"></script>
   </body>
 </html>
