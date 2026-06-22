@@ -20,6 +20,7 @@ function loadPurchasePrices() {
 }
 
 const PERIODS = [
+  { label: 'Aujourd’hui', days: 'today' },
   { label: '1j',   days: 1 },
   { label: '7j',   days: 7 },
   { label: '14j',  days: 14 },
@@ -64,12 +65,34 @@ function mondayFirstDayIndex(date) {
 }
 
 function filteredSales() {
+  if (state.periodDays === 'today') {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const end = start + 24 * 60 * 60 * 1000;
+    return state.sales.filter((sale) => {
+      const date = localSaleDate(sale);
+      return date && date.getTime() >= start && date.getTime() < end;
+    });
+  }
+
   if (!state.periodDays) return state.sales;
   const cutoff = Date.now() - state.periodDays * 24 * 60 * 60 * 1000;
   return state.sales.filter((sale) => {
     const date = localSaleDate(sale);
     return date && date.getTime() >= cutoff;
   });
+}
+
+function saleTextForLotDetection(sale, group = null) {
+  return [
+    sale.rawTitle,
+    sale.normalizedTitle,
+    group?.name
+  ].filter(Boolean).join(' ');
+}
+
+function isLotSale(sale, group = null) {
+  return /\blots?\b/i.test(saleTextForLotDetection(sale, group));
 }
 
 function summarizeSales(label, sales, group = null) {
@@ -79,8 +102,7 @@ function summarizeSales(label, sales, group = null) {
   const accounts = [...new Set(sales.map((sale) => sale.accountName).filter(Boolean))];
 
   const purchasePrices = loadPurchasePrices();
-  const groupKey = group?.id || label;
-  const purchaseCents = Math.round((Number(purchasePrices[groupKey]) || 0) * 100);
+  const purchaseCents = group?.purchaseCentsOverride ?? Math.round((Number(purchasePrices[group?.id || label]) || 0) * 100);
   const profit = total - purchaseCents;
 
   return {
@@ -105,12 +127,29 @@ function summarizeSales(label, sales, group = null) {
 
 function buildSummaries() {
   const sales = filteredSales();
+  const groupsById = new Map(state.groups.map((group) => [group.id, group]));
+  const lotSales = sales.filter((sale) => isLotSale(sale, sale.groupId ? groupsById.get(sale.groupId) : null));
+  const nonLotSales = sales.filter((sale) => !isLotSale(sale, sale.groupId ? groupsById.get(sale.groupId) : null));
+  const purchasePrices = loadPurchasePrices();
   const summaries = state.groups.map((group) => {
-    const groupSales = sales.filter((sale) => sale.groupId === group.id);
+    const groupSales = nonLotSales.filter((sale) => sale.groupId === group.id);
     return summarizeSales(group.name, groupSales, group);
   });
 
-  const ungrouped = sales.filter((sale) => !sale.groupId);
+  if (lotSales.length > 0) {
+    const lotGroupIds = [...new Set(lotSales.map((sale) => sale.groupId).filter(Boolean))];
+    const lotPurchaseCents = lotGroupIds.reduce((sum, groupId) => {
+      return sum + Math.round((Number(purchasePrices[groupId]) || 0) * 100);
+    }, 0);
+    summaries.push(summarizeSales('Lots', lotSales, {
+      id: 'auto-lots',
+      name: 'Lots',
+      mainImagePath: lotSales.find((sale) => sale.imagePath)?.imagePath || null,
+      purchaseCentsOverride: lotPurchaseCents
+    }));
+  }
+
+  const ungrouped = nonLotSales.filter((sale) => !sale.groupId);
   if (ungrouped.length > 0) {
     summaries.push(summarizeSales('Non groupées', ungrouped));
   }
@@ -134,7 +173,7 @@ function renderPeriodFilter() {
   elements.periodFilter.innerHTML = PERIODS.map(({ label, days }) => `
     <button type="button"
       class="period-btn ${state.periodDays === days ? 'active' : ''}"
-      data-period="${days === null ? 'null' : days}">
+      data-period="${days === null ? 'null' : escapeHtml(days)}">
       ${label}
     </button>
   `).join('');
@@ -237,10 +276,11 @@ function articleRankingItems() {
 
   for (const sale of sales) {
     const group = sale.groupId ? groupsById.get(sale.groupId) : null;
-    const key = group ? group.id : `sale:${sale.normalizedTitle || sale.rawTitle}`;
+    const isLot = isLotSale(sale, group);
+    const key = isLot ? 'auto-lots' : group ? group.id : `sale:${sale.normalizedTitle || sale.rawTitle}`;
     const item = items.get(key) || {
       id: key,
-      label: group?.name || sale.rawTitle || 'Article sans titre',
+      label: isLot ? 'Lots' : group?.name || sale.rawTitle || 'Article sans titre',
       count: 0,
       total: 0,
       lastSale: null
@@ -381,7 +421,7 @@ elements.periodFilter.addEventListener('click', (event) => {
   const button = event.target.closest('[data-period]');
   if (!button) return;
   const raw = button.dataset.period;
-  state.periodDays = raw === 'null' ? null : Number(raw);
+  state.periodDays = raw === 'null' ? null : raw === 'today' ? 'today' : Number(raw);
   renderStats();
 });
 

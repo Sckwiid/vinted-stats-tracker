@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exporter Temu</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup">
+    <header>
+      <p class="eyebrow">Temu vers stock</p>
+      <h1>Exporter commandes</h1>
+    </header>
+
+    <button id="scanBtn" class="scan-btn" type="button">Scanner commandes Temu</button>
+
+    <p id="status" class="status">Ouvre une page commandes Temu, puis clique sur scanner.</p>
+
+    <section id="preview" class="preview hidden">
+      <h2>Apercu</h2>
+      <ul id="previewList"></ul>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinted Stocks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260615-githubdb1">
+  <script defer src="config.js?v=20260615-githubdb1"></script>
+  <script defer src="app.js?v=20260615-githubdb1"></script>
+</head>
+<body>
+  <div class="bg-shape bg-shape-1" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-2" aria-hidden="true"></div>
+
+  <main class="layout">
+    <section id="loginView" class="panel login-panel">
+      <h1>Vinted Stocks</h1>
+      <p class="subtitle">Connexion Anthony / Julien / Compte pro</p>
+      <form id="loginForm" class="stacked-form">
+        <label for="username">Utilisateur</label>
+        <input id="username" name="username" type="text" autocomplete="username" placeholder="anthony, julien ou compte pro" required>
+
+        <label for="password">Mot de passe</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+        <button type="submit" class="btn btn-main">Se connecter</button>
+      </form>
+      <p id="loginError" class="message error hidden"></p>
+      <p class="hint">
+        Utilisateurs: anthony, julien et compte pro.
+      </p>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <header class="topbar panel">
+        <div>
+          <h2>Gestion des articles</h2>
+          <p class="subtitle">Stock total, en vente, disponible, tri et filtres</p>
+        </div>
+        <div class="topbar-actions">
+          <span id="sessionBadge" class="seller-badge"></span>
+          <span id="syncBadge" class="sync-badge sync-local">Sync local</span>
+          <button id="manualSyncBtn" class="btn btn-outline btn-small" type="button">Pousser stock</button>
+          <button id="goAddBtn" class="btn btn-main" type="button">Modifier les stocks</button>
+          <button id="logoutBtn" class="btn btn-outline" type="button">Deconnexion</button>
+        </div>
+      </header>
+
+      <section id="homeView">
+        <section class="stats-grid">
+          <article class="stat-card panel">
+            <p class="stat-label">Articles</p>
+            <p id="statProducts" class="stat-value">0</p>
+          </article>
+          <article class="stat-card panel">
+            <p class="stat-label">Stock disponible</p>
+            <p id="statAvailable" class="stat-value">0</p>
+          </article>
+          <article class="stat-card panel">
+            <p class="stat-label">Stock bas</p>
+            <p id="statLow" class="stat-value">0</p>
+          </article>
+          <article class="stat-card panel">
+            <p class="stat-label">Total en vente</p>
+            <p id="statListed" class="stat-value">0</p>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h3>Recherche, filtres et tri</h3>
+          <div class="toolbar">
+            <label>
+              Rechercher
+              <input id="searchInput" type="search" placeholder="Nom ou lien">
+            </label>
+            <label>
+              Filtre vendeur
+              <select id="sellerFilter">
+                <option value="all">Tous</option>
+                <option value="anthony">Anthony</option>
+                <option value="julien">Julien</option>
+                <option value="compte-pro">Compte pro</option>
+                <option value="both">Anthony + Julien</option>
+              </select>
+            </label>
+            <label class="check-label">
+              <input id="excludeAnthony" type="checkbox">
+              Exclure Anthony
+            </label>
+            <label class="check-label">
+              <input id="excludeJulien" type="checkbox">
+              Exclure Julien
+            </label>
+            <label class="check-label">
+              <input id="excludeComptePro" type="checkbox">
+              Exclure Compte pro
+            </label>
+            <label>
+              Tri
+              <select id="sortSelect">
+                <option value="updatedDesc">Recents</option>
+                <option value="nameAsc">Nom A-Z</option>
+                <option value="availableAsc">Stock dispo croissant</option>
+                <option value="availableDesc">Stock dispo decroissant</option>
+                <option value="listedDesc">En vente decroissant</option>
+              </select>
+            </label>
+            <label>
+              Stock dispo 0
+              <select id="stockZeroFilter">
+                <option value="all">Afficher tous</option>
+                <option value="onlyZero">Uniquement stock 0</option>
+                <option value="hideZero">Masquer stock 0</option>
+              </select>
+            </label>
+            <label class="check-label">
+              <input id="lowOnly" type="checkbox">
+              Uniquement stock bas
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h3>Articles</h3>
+            <button id="deleteAllBtn" class="btn btn-danger btn-small" type="button">Tout supprimer</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>Produit</th>
+                  <th>Vendeur</th>
+                  <th>Stock total</th>
+                  <th>En vente</th>
+                  <th>Stock dispo</th>
+                  <th>Seuil bas</th>
+                  <th>Lien Order Temu</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsBody"></tbody>
+            </table>
+          </div>
+          <p id="emptyState" class="message hidden">Aucun produit pour ce filtre.</p>
+        </section>
+      </section>
+
+      <section id="addView" class="hidden">
+        <section class="panel page-heading">
+          <div>
+            <h3>Ajouter un article</h3>
+            <p class="subtitle">Images multiples, stock, lien Order Temu et import commandes</p>
+          </div>
+          <button id="backHomeFromAdd" class="btn btn-outline" type="button">Retour</button>
+        </section>
+
+        <section class="panel import-panel">
+          <div>
+            <h3>Importer commandes Temu</h3>
+            <p class="subtitle">Charge le fichier JSON dans une validation temporaire. Rien n'est ajoute au stock avant validation.</p>
+          </div>
+          <label class="import-file-label">
+            Fichier export Temu
+            <input id="temuImportFile" type="file" accept=".json,application/json">
+          </label>
+          <p class="hint">
+            Format attendu: JSON avec un tableau <code>items</code> contenant titre, prix d'achat, quantite, image et lien Order Temu.
+          </p>
+        </section>
+
+        <section id="importReviewPanel" class="panel import-review-panel hidden">
+          <div class="section-heading">
+            <div>
+              <h3>Validation import Temu</h3>
+              <p id="importReviewSummary" class="subtitle">0 article en attente.</p>
+            </div>
+            <div class="review-actions">
+              <button id="clearImportReviewBtn" class="btn btn-outline btn-small" type="button">Annuler l'import</button>
+              <button id="confirmImportReviewBtn" class="btn btn-main btn-small" type="button">Valider l'import</button>
+            </div>
+          </div>
+          <div id="importReviewList" class="import-review-list"></div>
+          <p id="importReviewEmpty" class="message hidden">Aucun article a valider.</p>
+        </section>
+
+        <section class="panel">
+          <form id="addProductForm" class="product-form add-product-form">
+            <label>
+              Nom du produit
+              <input name="name" type="text" required placeholder="Ex: Mini jupe blanche">
+            </label>
+            <label>
+              Stock total
+              <input name="totalStock" type="number" min="0" required value="0">
+            </label>
+            <label>
+              Quantite en vente
+              <input name="listedQuantity" type="number" min="0" value="0">
+            </label>
+            <fieldset class="seller-picker">
+              <legend>Mis en vente par</legend>
+              <div class="seller-checkboxes">
+                <label class="seller-option">
+                  <input type="checkbox" name="listedBy" value="anthony">
+                  <span class="seller-badge seller-anthony">Anthony</span>
+                </label>
+                <label class="seller-option">
+                  <input type="checkbox" name="listedBy" value="julien">
+                  <span class="seller-badge seller-julien">Julien</span>
+                </label>
+                <label class="seller-option">
+                  <input type="checkbox" name="listedBy" value="compte-pro">
+                  <span class="seller-badge seller-compte-pro">Compte pro</span>
+                </label>
+              </div>
+            </fieldset>
+            <label>
+              Seuil stock bas
+              <input name="lowThreshold" type="number" min="0" value="3">
+            </label>
+            <label>
+              Prix d'achat Temu
+              <input name="purchasePrice" type="number" min="0" step="0.01" placeholder="Optionnel">
+            </label>
+            <label>
+              Lien Order Temu
+              <input name="articleLink" type="url" placeholder="https://www.temu.com/...">
+            </label>
+            <label class="wide-field">
+              Images URL (une par ligne)
+              <textarea name="imageUrls" rows="4" placeholder="https://image-1...&#10;https://image-2...&#10;https://image-3..."></textarea>
+            </label>
+            <label class="wide-field">
+              Images fichier
+              <input name="imageFiles" type="file" accept="image/*" multiple>
+            </label>
+            <button type="submit" class="btn btn-main">Ajouter l'article</button>
+          </form>
+        </section>
+      </section>
+
+      <section id="detailView" class="hidden">
+        <div id="detailBody"></div>
+      </section>
+
+      <p id="statusMessage" class="message hidden"></p>
+    </section>
+  </main>
+</body>
+</html>

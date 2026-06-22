@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Temu Orders Exporter",
+  "version": "1.0.8",
+  "description": "Exporte les articles visibles depuis les commandes Temu vers le gestionnaire de stocks.",
+  "permissions": ["activeTab", "scripting", "downloads"],
+  "host_permissions": [
+    "https://*.temu.com/*",
+    "https://*.temu.fr/*"
+  ],
+  "action": {
+    "default_title": "Exporter commandes Temu",
+    "default_popup": "popup.html"
+  }
+}
