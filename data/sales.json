@@ -452,11 +452,11 @@
     "priceFormatted": "14,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "sent",
     "groupId": null,
     "soldAt": "2026-06-12T12:03:49.000Z",
     "createdAt": "2026-06-21T18:35:22.396Z",
-    "updatedAt": "2026-06-21T18:35:22.413Z"
+    "updatedAt": "2026-06-22T20:12:29.548Z"
   },
   {
     "id": "sale_b2e540d365c0",
