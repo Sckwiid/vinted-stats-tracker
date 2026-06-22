@@ -26,6 +26,7 @@ export function saveSettings({ apiUrl, adminToken }) {
 }
 
 export function setupShell(activePage) {
+  window.__dashboardModuleLoaded = true;
   const nav = document.querySelector('[data-nav]');
   if (nav) {
     nav.innerHTML = `

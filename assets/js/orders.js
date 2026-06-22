@@ -1,4 +1,7 @@
-import {
+import * as Common from './common.js';
+import { mergeSale, pollNow, updateSaleStatus } from './api.js';
+
+const {
   STATUS_LABELS,
   STATUS_ORDER,
   accountBadge,
@@ -13,6 +16,8 @@ import {
   setupShell,
   showToast,
   statusBadge
+} = Common;
+
 } from './common.js?v=20260622-stock-matching';
 
 } from './common.js?v=20260622-stocks-nav';
