@@ -13,7 +13,7 @@ import {
   setupShell,
   showToast,
   statusBadge
-} from './common.js';
+} from './common.js?v=20260622-stocks-nav';
 import { mergeSale, pollNow, updateSaleStatus } from './api.js';
 
 const state = {

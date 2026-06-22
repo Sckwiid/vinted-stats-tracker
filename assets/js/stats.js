@@ -7,7 +7,7 @@ import {
   renderError,
   saleImageMarkup,
   setupShell
-} from './common.js';
+} from './common.js?v=20260622-stocks-nav';
 
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
 

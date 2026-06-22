@@ -11,7 +11,7 @@ import {
   setupShell,
   showToast,
   statusBadge
-} from './common.js';
+} from './common.js?v=20260622-stocks-nav';
 import { mergeSale, renameGroup } from './api.js';
 
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';

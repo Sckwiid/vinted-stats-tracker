@@ -1,4 +1,4 @@
-import { apiRequest } from './common.js';
+import { apiRequest } from './common.js?v=20260622-stocks-nav';
 
 export function pollNow() {
   return apiRequest('/api/poll', { method: 'POST' });
