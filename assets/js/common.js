@@ -32,6 +32,7 @@ export function setupShell(activePage) {
       <a href="index.html" class="${activePage === 'orders' ? 'active' : ''}">Commandes</a>
       <a href="statistiques.html" class="${activePage === 'stats' ? 'active' : ''}">Statistiques</a>
       <a href="articles.html" class="${activePage === 'articles' ? 'active' : ''}">Articles</a>
+      <a href="vinted-stocks/index.html">Stocks</a>
     `;
   }
 
