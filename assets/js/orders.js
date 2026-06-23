@@ -18,11 +18,6 @@ const {
   statusBadge
 } = Common;
 
-} from './common.js?v=20260622-stock-matching';
-
-} from './common.js?v=20260622-stocks-nav';
-import { mergeSale, pollNow, updateSaleStatus } from './api.js';
-
 const state = {
   sales: [],
   groups: [],

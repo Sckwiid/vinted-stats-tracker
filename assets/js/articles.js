@@ -1,4 +1,7 @@
-import {
+import * as Common from './common.js';
+import { mergeSale, renameGroup } from './api.js';
+
+const {
   accountBadge,
   escapeHtml,
   formatDate,
@@ -11,10 +14,7 @@ import {
   setupShell,
   showToast,
   statusBadge
-} from './common.js?v=20260622-stock-matching';
-
-} from './common.js?v=20260622-stocks-nav';
-import { mergeSale, renameGroup } from './api.js';
+} = Common;
 
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
 const STOCK_PRODUCTS_KEY = 'vinted_stocks_data_v1';

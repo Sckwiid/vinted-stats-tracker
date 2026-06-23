@@ -1,4 +1,6 @@
-import {
+import * as Common from './common.js';
+
+const {
   accountBadges,
   escapeHtml,
   formatDate,
@@ -7,9 +9,7 @@ import {
   renderError,
   saleImageMarkup,
   setupShell
-} from './common.js?v=20260622-stock-matching';
-
-} from './common.js?v=20260622-stocks-nav';
+} = Common;
 
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
 
