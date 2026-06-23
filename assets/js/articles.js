@@ -1,5 +1,4 @@
 import * as Common from './common.js';
-import { mergeSale, renameGroup } from './api.js';
 
 const {
   accountBadge,

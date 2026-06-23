@@ -1,7 +1,5 @@
 import * as Common from './common.js';
 
-import { mergeSale, pollNow, updateSaleStatus } from './api.js';
-
 const {
   STATUS_LABELS,
   STATUS_ORDER,
@@ -36,7 +34,6 @@ function mergeSale(saleId, payload) {
     body: JSON.stringify(payload)
   });
 }
-
 
 const state = {
   sales: [],
