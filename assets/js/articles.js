@@ -16,6 +16,20 @@ const {
   statusBadge
 } = Common;
 
+function mergeSale(saleId, payload) {
+  return Common.apiRequest(`/api/sales/${encodeURIComponent(saleId)}/merge`, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
+function renameGroup(groupId, name) {
+  return Common.apiRequest(`/api/groups/${encodeURIComponent(groupId)}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ name })
+  });
+}
+
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
 const STOCK_PRODUCTS_KEY = 'vinted_stocks_data_v1';
 const STOCK_MATCHES_KEY = 'vinted-stock-sale-matches';

@@ -1,4 +1,5 @@
 import * as Common from './common.js';
+
 import { mergeSale, pollNow, updateSaleStatus } from './api.js';
 
 const {
@@ -17,6 +18,25 @@ const {
   showToast,
   statusBadge
 } = Common;
+
+function pollNow() {
+  return Common.apiRequest('/api/poll', { method: 'POST' });
+}
+
+function updateSaleStatus(saleId, status) {
+  return Common.apiRequest(`/api/sales/${encodeURIComponent(saleId)}/status`, {
+    method: 'POST',
+    body: JSON.stringify({ status })
+  });
+}
+
+function mergeSale(saleId, payload) {
+  return Common.apiRequest(`/api/sales/${encodeURIComponent(saleId)}/merge`, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
 
 const state = {
   sales: [],

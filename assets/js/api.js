@@ -2,6 +2,8 @@ import * as Common from './common.js';
 
 const dashboardApiRequest = Common.apiRequest;
 
+const dashboardApiRequest = Common.apiRequest;
+
 
 const dashboardApiRequest = Common.apiRequest;
 import { apiRequest } from './common.js?v=20260622-stock-matching';
