@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_35fe6963eb84",
+    "sourceMessageId": "<0102019efe9221dc-88e85aa2-20af-44b7-aabc-301f81dc8b60-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "laurence4815",
+    "rawTitle": "Chemise blanche manches courtes d’été pour femme",
+    "normalizedTitle": "chemise blanche manches courtes d ete pour femme",
+    "priceCents": 1200,
+    "priceFormatted": "12,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-25T11:37:30.000Z",
+    "createdAt": "2026-06-25T11:38:35.993Z",
+    "updatedAt": "2026-06-25T11:38:36.025Z"
+  },
+  {
     "id": "sale_d27fc9867151",
     "sourceMessageId": "<0102019efa492746-681d4e86-5c85-4d85-a9ac-69f4f2c38407-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
