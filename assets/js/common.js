@@ -3,6 +3,10 @@ const STORAGE_KEYS = {
   adminToken: 'vinted-dashboard-admin-token'
 };
 
+export const STOCK_PRODUCTS_KEY = 'vinted_stocks_data_v1';
+export const STOCK_MATCHES_KEY = 'vinted-stock-sale-matches';
+export const SALE_PURCHASE_OVERRIDES_KEY = 'vinted-sale-purchase-overrides';
+
 export const STATUS_LABELS = {
   todo: 'Pas encore préparé',
   prepared: 'Préparé',
@@ -141,6 +145,150 @@ export function placeholderMarkup() {
 export function saleImageMarkup(sale, alt = '') {
   if (!sale.imagePath) return placeholderMarkup();
   return `<img src="${escapeHtml(imageUrl(sale.imagePath))}" alt="${escapeHtml(alt || sale.rawTitle)}" loading="lazy">`;
+}
+
+export function loadStockProducts() {
+  try {
+    const products = JSON.parse(localStorage.getItem(STOCK_PRODUCTS_KEY) || '[]');
+    return Array.isArray(products) ? products.filter((product) => product && product.id) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function loadStockMatches() {
+  try {
+    const matches = JSON.parse(localStorage.getItem(STOCK_MATCHES_KEY) || '{}');
+    return matches && typeof matches === 'object' ? matches : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveStockMatches(matches) {
+  localStorage.setItem(STOCK_MATCHES_KEY, JSON.stringify(matches || {}));
+}
+
+export function loadSalePurchaseOverrides() {
+  try {
+    const overrides = JSON.parse(localStorage.getItem(SALE_PURCHASE_OVERRIDES_KEY) || '{}');
+    return overrides && typeof overrides === 'object' ? overrides : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveSalePurchaseOverrides(overrides) {
+  localStorage.setItem(SALE_PURCHASE_OVERRIDES_KEY, JSON.stringify(overrides || {}));
+}
+
+export function productImages(product) {
+  const images = Array.isArray(product?.images) ? product.images : [];
+  const photo = product?.photo ? [product.photo] : [];
+  return [...images, ...photo].map((image) => String(image || '').trim()).filter(Boolean);
+}
+
+export function productImageMarkup(product) {
+  const image = productImages(product)[0];
+  if (!image) return placeholderMarkup();
+  return `<img src="${escapeHtml(image)}" alt="${escapeHtml(product?.name || 'Article stock')}" loading="lazy">`;
+}
+
+export function stockPurchaseCents(product) {
+  const price = Number(product?.purchasePrice ?? product?.temu?.purchasePrice ?? 0);
+  return Number.isFinite(price) ? Math.round(price * 100) : 0;
+}
+
+export function stockSearchText(product) {
+  return normalizeClientText([
+    product?.name,
+    product?.articleLink,
+    product?.temu?.variant,
+    product?.temu?.color,
+    product?.temu?.productUrl,
+    product?.temu?.orderPageUrl
+  ].filter(Boolean).join(' '));
+}
+
+export function saleSearchText(sale) {
+  return normalizeClientText([sale?.rawTitle, sale?.normalizedTitle].filter(Boolean).join(' '));
+}
+
+export function saleLooksLikeLot(sale) {
+  return /\b(et|lot|lots|ensemble|pack|duo)\b/i.test(saleSearchText(sale));
+}
+
+export function saleStockSegments(sale) {
+  const title = String(sale?.rawTitle || sale?.normalizedTitle || '').trim();
+  if (!saleLooksLikeLot(sale)) return [title];
+
+  const parts = title
+    .split(/\s+(?:\+|&|\bet\b|\bavec\b)\s+/i)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 2);
+
+  if (parts.length >= 2) return parts.slice(0, 4);
+  return [title];
+}
+
+export function stockScore(query, product) {
+  const productText = stockSearchText(product);
+  const queryText = normalizeClientText(query);
+  if (!queryText || !productText) return 0;
+  if (productText.includes(queryText) || queryText.includes(productText)) return 100;
+
+  const queryTokens = queryText.split(' ').filter((token) => token.length > 2);
+  if (queryTokens.length === 0) return 0;
+
+  const matched = queryTokens.filter((token) => productText.includes(token));
+  const coverage = matched.length / queryTokens.length;
+  return Math.round(coverage * 90) + Math.min(matched.length, 10);
+}
+
+export function bestStockMatch(query, products, excludedIds = []) {
+  return products
+    .filter((product) => !excludedIds.includes(product.id))
+    .map((product) => ({ product, score: stockScore(query, product) }))
+    .filter((match) => match.score >= 35)
+    .sort((a, b) => b.score - a.score)[0] || null;
+}
+
+export function autoStockMatches(sale, products, matches = {}) {
+  const manualIds = matches[sale.id];
+  if (Array.isArray(manualIds)) {
+    return manualIds.map((productId) => products.find((product) => product.id === productId) || null).filter(Boolean);
+  }
+
+  const detected = [];
+  for (const segment of saleStockSegments(sale)) {
+    const match = bestStockMatch(segment, products, detected.map((item) => item.product.id));
+    if (match) detected.push(match);
+  }
+
+  return detected.map((match) => match.product);
+}
+
+export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrides = {}) {
+  const matchedProducts = autoStockMatches(sale, products, matches);
+  const stockPurchase = matchedProducts.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
+  const override = purchaseOverrides[sale.id];
+  const overrideCents = override === '' || override === undefined || override === null
+    ? null
+    : Math.round(Number(override) * 100);
+  const purchaseCents = Number.isFinite(overrideCents) ? overrideCents : stockPurchase;
+  const confidence = Array.isArray(matches[sale.id])
+    ? 'manual'
+    : matchedProducts.length > 0
+      ? 'auto'
+      : 'missing';
+
+  return {
+    products: matchedProducts,
+    purchaseCents,
+    stockPurchaseCents: stockPurchase,
+    hasPurchaseOverride: Number.isFinite(overrideCents),
+    confidence
+  };
 }
 
 export function statusBadge(status) {

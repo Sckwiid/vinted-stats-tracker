@@ -5,9 +5,14 @@ const {
   escapeHtml,
   formatDate,
   formatMoney,
+  loadSalePurchaseOverrides,
   loadDashboardData,
+  loadStockMatches,
+  loadStockProducts,
+  productImageMarkup,
   renderError,
   saleImageMarkup,
+  saleStockMatchInfo,
   setupShell
 } = Common;
 
@@ -37,6 +42,9 @@ const PERIODS = [
 const state = {
   sales: [],
   groups: [],
+  stockProducts: [],
+  stockMatches: {},
+  purchaseOverrides: {},
   chartMode: 'time',
   periodDays: null
 };
@@ -285,11 +293,20 @@ function articleRankingItems() {
       label: isLot ? 'Lots' : group?.name || sale.rawTitle || 'Article sans titre',
       count: 0,
       total: 0,
-      lastSale: null
+      lastSale: null,
+      imageProduct: null,
+      imagePath: group?.mainImagePath || sale.imagePath || null
     };
 
     item.count += 1;
     item.total += Number(sale.priceCents || 0);
+    const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+    if (!item.imageProduct && stockInfo.products[0]) {
+      item.imageProduct = stockInfo.products[0];
+    }
+    if (!item.imagePath && sale.imagePath) {
+      item.imagePath = sale.imagePath;
+    }
 
     const saleDate = localSaleDate(sale);
     if (saleDate && (!item.lastSale || saleDate > item.lastSale)) {
@@ -300,8 +317,12 @@ function articleRankingItems() {
   }
 
   return [...items.values()]
-    .sort((a, b) => b.count - a.count || b.total - a.total || a.label.localeCompare(b.label, 'fr'))
-    .slice(0, 12);
+    .sort((a, b) => b.count - a.count || b.total - a.total || a.label.localeCompare(b.label, 'fr'));
+}
+
+function rankingImageMarkup(item) {
+  if (item.imageProduct) return productImageMarkup(item.imageProduct);
+  return saleImageMarkup({ imagePath: item.imagePath, rawTitle: item.label }, item.label);
 }
 
 function renderArticleRanking() {
@@ -323,6 +344,7 @@ function renderArticleRanking() {
           const width = max ? Math.max(8, Math.round((item.count / max) * 100)) : 0;
           return `
             <div class="ranking-row">
+              <div class="ranking-thumb">${rankingImageMarkup(item)}</div>
               <div class="ranking-label">
                 <strong>${escapeHtml(item.label)}</strong>
                 <span>${item.lastSale ? `Dernière vente: ${formatDate(item.lastSale.toISOString())}` : 'Date inconnue'}</span>
@@ -406,6 +428,9 @@ async function loadAndRender() {
     const data = await loadDashboardData();
     state.sales = data.sales;
     state.groups = data.groups;
+    state.stockProducts = loadStockProducts();
+    state.stockMatches = loadStockMatches();
+    state.purchaseOverrides = loadSalePurchaseOverrides();
     renderStats();
   } catch (error) {
     renderError(elements.list, error);
