@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_30351d864ee0",
+    "sourceMessageId": "<0102019eff5c2fb5-5cba9fc5-901a-4edb-8c0e-b1fbee437b95-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "denisebennett",
+    "rawTitle": "Ensemble short beige et top d’été neuf pour femme",
+    "normalizedTitle": "ensemble short beige et top d ete neuf pour femme",
+    "priceCents": 1850,
+    "priceFormatted": "18,50 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-25T15:18:12.000Z",
+    "createdAt": "2026-06-25T15:19:24.683Z",
+    "updatedAt": "2026-06-25T15:19:24.695Z"
+  },
+  {
     "id": "sale_35fe6963eb84",
     "sourceMessageId": "<0102019efe9221dc-88e85aa2-20af-44b7-aabc-301f81dc8b60-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
