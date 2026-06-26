@@ -10,11 +10,16 @@
     "priceFormatted": "30,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "sent",
     "groupId": null,
     "soldAt": "2026-06-21T18:31:55.000Z",
+<<<<<<< Updated upstream
     "createdAt": "2026-06-21T18:35:22.981Z",
     "updatedAt": "2026-06-21T18:35:22.995Z"
+=======
+    "createdAt": "2026-06-26T06:07:26.482Z",
+    "updatedAt": "2026-06-26T16:08:43.896Z"
+>>>>>>> Stashed changes
   },
   {
     "id": "sale_8b6bd410829a",
