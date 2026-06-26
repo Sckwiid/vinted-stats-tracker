@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_a62c7ebf35bb",
+    "sourceMessageId": "<0102019f052dedb2-b6237018-7a8d-4e4e-a492-19cc0f23ae5a-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "sophie15111991",
+    "rawTitle": "Ensemble short taille haute et top bandeau rayé crochet d’été pour femme",
+    "normalizedTitle": "ensemble short taille haute et top bandeau raye crochet d ete pour femme",
+    "priceCents": 2000,
+    "priceFormatted": "20,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-26T18:25:23.000Z",
+    "createdAt": "2026-06-26T18:26:17.184Z",
+    "updatedAt": "2026-06-26T18:26:17.197Z"
+  },
+  {
     "id": "sale_332416f93b77",
     "sourceMessageId": "<0102019f05176cee-e2726a3f-d799-47e8-8bf7-c456dfe29d0e-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
