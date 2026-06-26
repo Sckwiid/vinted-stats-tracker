@@ -185,7 +185,11 @@ export function saveSalePurchaseOverrides(overrides) {
 export function productImages(product) {
   const images = Array.isArray(product?.images) ? product.images : [];
   const photo = product?.photo ? [product.photo] : [];
-  return [...images, ...photo].map((image) => String(image || '').trim()).filter(Boolean);
+  const imageUrl = product?.imageUrl ? [product.imageUrl] : [];
+  const temuImageUrl = product?.temu?.imageUrl ? [product.temu.imageUrl] : [];
+  return [...images, ...photo, ...imageUrl, ...temuImageUrl]
+    .map((image) => String(image || '').trim())
+    .filter(Boolean);
 }
 
 export function productImageMarkup(product) {

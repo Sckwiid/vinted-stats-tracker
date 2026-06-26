@@ -65,6 +65,8 @@ const elements = {
   showFinished: document.querySelector('[data-show-finished]'),
   refresh: document.querySelector('[data-refresh]'),
   poll: document.querySelector('[data-poll]'),
+  bulkPrepared: document.querySelector('[data-bulk-prepared]'),
+  bulkSent: document.querySelector('[data-bulk-sent]'),
   modal: document.querySelector('[data-merge-modal]'),
   stockModal: document.querySelector('[data-stock-modal]'),
   stockForm: document.querySelector('[data-stock-form]'),
@@ -72,6 +74,7 @@ const elements = {
   stockSearch: document.querySelector('[data-stock-search]'),
   stockFields: document.querySelector('[data-stock-fields]'),
   stockPurchase: document.querySelector('[data-stock-purchase]'),
+  stockSelectedList: document.querySelector('[data-stock-selected-list]'),
   mergeForm: document.querySelector('[data-merge-form]'),
   groupSearch: document.querySelector('[data-group-search]'),
   groupSelect: document.querySelector('[data-group-select]'),
@@ -206,26 +209,42 @@ function renderOrders() {
     .join('');
 }
 
-function stockOptions(selectedId = '') {
+function selectedStockIdsForSale(sale) {
+  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const selectedIds = Array.isArray(state.stockMatches[sale.id])
+    ? state.stockMatches[sale.id]
+    : info.products.map((product) => product.id);
+  return [...new Set(selectedIds.filter(Boolean))].slice(0, 4);
+}
+
+function filteredStockProducts(selectedIds = []) {
   const query = normalizeClientText(state.stockSearch);
   const products = query
-    ? state.stockProducts
-        .map((product) => ({
-          product,
-          score: stockSearchText(product).includes(query) ? 2 : 0
-        }))
-        .filter((item) => item.score > 0)
-        .map((item) => item.product)
+    ? state.stockProducts.filter((product) => stockSearchText(product).includes(query))
     : state.stockProducts;
 
+  const selectedSet = new Set(selectedIds);
+  return products
+    .slice()
+    .sort((a, b) => {
+      const selectedDiff = Number(selectedSet.has(b.id)) - Number(selectedSet.has(a.id));
+      if (selectedDiff) return selectedDiff;
+      return String(a.name || '').localeCompare(String(b.name || ''), 'fr');
+    });
+}
+
+function stockProductCard(product, selectedIds = []) {
+  const selected = selectedIds.includes(product.id);
+  const purchase = stockPurchaseCents(product);
   return `
-    <option value="">Aucun article</option>
-    ${products
-      .map((product) => {
-        const price = stockPurchaseCents(product) ? ` · ${formatMoney(stockPurchaseCents(product))}` : '';
-        return `<option value="${escapeHtml(product.id)}" ${product.id === selectedId ? 'selected' : ''}>${escapeHtml((product.name || 'Article stock') + price)}</option>`;
-      })
-      .join('')}
+    <button class="stock-product-card ${selected ? 'selected' : ''}" type="button" data-stock-product-id="${escapeHtml(product.id)}" aria-pressed="${selected ? 'true' : 'false'}">
+      <span class="stock-product-card-image">${productImageMarkup(product)}</span>
+      <span class="stock-product-card-body">
+        <strong>${escapeHtml(product.name || 'Article stock')}</strong>
+        <small>${purchase ? `Achat ${formatMoney(purchase)}` : 'Prix d’achat inconnu'}</small>
+      </span>
+      <span class="stock-product-card-check">${selected ? '✓' : '+'}</span>
+    </button>
   `;
 }
 
@@ -233,19 +252,27 @@ function renderStockFields() {
   const sale = state.sales.find((item) => item.id === state.selectedStockSaleId);
   if (!sale || !elements.stockFields) return;
 
-  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
-  const selectedIds = Array.isArray(state.stockMatches[sale.id])
-    ? state.stockMatches[sale.id]
-    : info.products.map((product) => product.id);
+  const selectedIds = selectedStockIdsForSale(sale);
+  const products = filteredStockProducts(selectedIds);
+  const selectedProducts = selectedIds
+    .map((productId) => state.stockProducts.find((product) => product.id === productId))
+    .filter(Boolean);
 
-  elements.stockFields.innerHTML = [0, 1, 2, 3]
-    .map((index) => `
-      <label>
-        Article stock ${index + 1}
-        <select name="product${index}">${stockOptions(selectedIds[index] || '')}</select>
-      </label>
-    `)
-    .join('');
+  if (elements.stockSelectedList) {
+    elements.stockSelectedList.innerHTML = selectedProducts.length === 0
+      ? '<p class="muted">Aucun article sélectionné. Clique sur une carte ci-dessous.</p>'
+      : selectedProducts.map((product) => `
+          <span class="stock-selected-pill">
+            ${productImageMarkup(product)}
+            <span>${escapeHtml(product.name || 'Article stock')}</span>
+            <button type="button" data-remove-stock-product="${escapeHtml(product.id)}" aria-label="Retirer">×</button>
+          </span>
+        `).join('');
+  }
+
+  elements.stockFields.innerHTML = products.length === 0
+    ? '<div class="empty-state">Aucun article trouvé dans le stock avec cette recherche.</div>'
+    : products.map((product) => stockProductCard(product, selectedIds)).join('');
 }
 
 function openStockModal(saleId) {
@@ -324,6 +351,40 @@ async function loadAndRender() {
   }
 }
 
+async function updateVisibleSalesStatus(status) {
+  const sales = filteredSales().filter((sale) => sale.status !== status && !['finished', 'archived'].includes(sale.status));
+  if (sales.length === 0) {
+    showToast('Aucune commande à modifier');
+    return;
+  }
+
+  const label = STATUS_LABELS[status] || status;
+  const confirmed = window.confirm(`Passer ${sales.length} commande(s) affichée(s) en "${label}" ?`);
+  if (!confirmed) return;
+
+  for (const button of [elements.bulkPrepared, elements.bulkSent]) {
+    if (button) button.disabled = true;
+  }
+
+  let updated = 0;
+  try {
+    for (const sale of sales) {
+      const result = await updateSaleStatus(sale.id, status);
+      Object.assign(sale, result.sale || { status });
+      updated += 1;
+    }
+    renderOrders();
+    showToast(`${updated} commande(s) mise(s) à jour`);
+  } catch (error) {
+    renderOrders();
+    showToast(`${updated}/${sales.length} commande(s) mise(s) à jour. ${error.message}`, 'error');
+  } finally {
+    for (const button of [elements.bulkPrepared, elements.bulkSent]) {
+      if (button) button.disabled = false;
+    }
+  }
+}
+
 elements.list.addEventListener('click', async (event) => {
   const statusButton = event.target.closest('[data-status]');
   const mergeButton = event.target.closest('[data-merge]');
@@ -360,6 +421,8 @@ for (const element of [elements.search, elements.status, elements.account, eleme
 }
 
 elements.refresh.addEventListener('click', loadAndRender);
+if (elements.bulkPrepared) elements.bulkPrepared.addEventListener('click', () => updateVisibleSalesStatus('prepared'));
+if (elements.bulkSent) elements.bulkSent.addEventListener('click', () => updateVisibleSalesStatus('sent'));
 elements.poll.addEventListener('click', async () => {
   elements.poll.disabled = true;
   try {
@@ -391,15 +454,49 @@ if (elements.stockModal) {
   });
 }
 
+if (elements.stockFields) {
+  elements.stockFields.addEventListener('click', (event) => {
+    const card = event.target.closest('[data-stock-product-id]');
+    if (!card || !state.selectedStockSaleId) return;
+
+    const productId = card.dataset.stockProductId;
+    const current = selectedStockIdsForSale({ id: state.selectedStockSaleId });
+    const next = current.includes(productId)
+      ? current.filter((id) => id !== productId)
+      : [...current, productId].slice(0, 4);
+
+    if (next.length === 0) {
+      delete state.stockMatches[state.selectedStockSaleId];
+    } else {
+      state.stockMatches[state.selectedStockSaleId] = next;
+    }
+    renderStockFields();
+  });
+}
+
+if (elements.stockSelectedList) {
+  elements.stockSelectedList.addEventListener('click', (event) => {
+    const removeButton = event.target.closest('[data-remove-stock-product]');
+    if (!removeButton || !state.selectedStockSaleId) return;
+
+    const current = selectedStockIdsForSale({ id: state.selectedStockSaleId });
+    const next = current.filter((id) => id !== removeButton.dataset.removeStockProduct);
+    if (next.length === 0) {
+      delete state.stockMatches[state.selectedStockSaleId];
+    } else {
+      state.stockMatches[state.selectedStockSaleId] = next;
+    }
+    renderStockFields();
+  });
+}
+
 if (elements.stockForm) {
   elements.stockForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const saleId = state.selectedStockSaleId;
     if (!saleId) return;
 
-    const productIds = [0, 1, 2, 3]
-      .map((index) => elements.stockForm.elements[`product${index}`]?.value)
-      .filter(Boolean);
+    const productIds = selectedStockIdsForSale({ id: saleId });
 
     if (productIds.length === 0) {
       delete state.stockMatches[saleId];

@@ -48,6 +48,8 @@
           Terminées
         </label>
         <button class="secondary" data-refresh type="button">Rafraîchir</button>
+        <button class="secondary" data-bulk-prepared type="button">Tout préparer</button>
+        <button class="secondary" data-bulk-sent type="button">Tout envoyer</button>
         <button data-poll type="button">Vérifier Gmail</button>
       </section>
 
@@ -83,7 +85,8 @@
         </div>
         <form data-stock-form>
           <input data-stock-search type="search" placeholder="Rechercher dans le stock">
-          <div class="stock-fields" data-stock-fields></div>
+          <div class="stock-selected-list" data-stock-selected-list></div>
+          <div class="stock-fields stock-product-grid" data-stock-fields></div>
           <label>
             Prix d'achat pour cette vente (€)
             <input data-stock-purchase name="purchasePrice" type="number" min="0" step="0.01" placeholder="Laisser vide = prix du stock">
