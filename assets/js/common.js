@@ -350,7 +350,10 @@ export function autoStockMatches(sale, products, matches = {}, ignored = {}) {
 }
 
 export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrides = {}, ignored = {}) {
+  const manualIds = Array.isArray(matches[sale.id]) ? matches[sale.id] : [];
   const matchedProducts = autoStockMatches(sale, products, matches, ignored);
+  const matchedProductIds = new Set(matchedProducts.map((product) => product.id));
+  const missingProductIds = manualIds.filter((productId) => !matchedProductIds.has(productId));
   const stockPurchase = matchedProducts.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
   const override = purchaseOverrides[sale.id];
   const overrideCents = override === '' || override === undefined || override === null
@@ -369,6 +372,8 @@ export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrid
     products: matchedProducts,
     purchaseCents,
     stockPurchaseCents: stockPurchase,
+    missingProductIds,
+    hasMissingProducts: missingProductIds.length > 0,
     hasPurchaseOverride: Number.isFinite(overrideCents),
     ignored: Boolean(ignored[sale.id]),
     confidence

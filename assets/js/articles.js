@@ -269,7 +269,10 @@ function autoStockMatches(sale) {
 }
 
 function saleStockMatchInfo(sale) {
+  const manualIds = Array.isArray(state.stockMatches[sale.id]) ? state.stockMatches[sale.id] : [];
   const products = autoStockMatches(sale).filter(Boolean);
+  const productIds = new Set(products.map((product) => product.id));
+  const missingProductIds = manualIds.filter((productId) => !productIds.has(productId));
   const stockPurchaseCentsTotal = products.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
   const override = state.purchaseOverrides[sale.id];
   const overrideCents = override === '' || override === undefined || override === null
@@ -284,7 +287,15 @@ function saleStockMatchInfo(sale) {
         ? 'auto'
         : 'missing';
 
-  return { products, purchaseCents, confidence, hasPurchaseOverride: Number.isFinite(overrideCents), ignored: Boolean(state.stockIgnored[sale.id]) };
+  return {
+    products,
+    purchaseCents,
+    confidence,
+    missingProductIds,
+    hasMissingProducts: missingProductIds.length > 0,
+    hasPurchaseOverride: Number.isFinite(overrideCents),
+    ignored: Boolean(state.stockIgnored[sale.id])
+  };
 }
 
 function stockOptions(selectedId = '') {
@@ -301,8 +312,12 @@ function stockMatchSummaryMarkup(sale) {
   if (state.stockProducts.length === 0) {
     return '<p class="stock-match-line missing">Stock non chargé : ouvre d’abord la page Stocks sur ce navigateur.</p>';
   }
-  if (info.products.length === 0 && !info.hasPurchaseOverride) {
+  if (info.products.length === 0 && !info.hasPurchaseOverride && !info.hasMissingProducts) {
     return '<p class="stock-match-line missing">Aucune correspondance stock détectée. Clique sur “Vérifier les correspondances stock”.</p>';
+  }
+
+  if (info.hasMissingProducts && info.products.length === 0 && !info.hasPurchaseOverride) {
+    return '<p class="stock-match-line manual"><span>Validé manuellement</span><span>Article retiré du stock · Ajoute un prix manuel</span></p>';
   }
 
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
@@ -315,7 +330,9 @@ function stockMatchSummaryMarkup(sale) {
         : 'Prix manuel';
   const productsText = info.products.length > 0
     ? `<strong>${info.products.map((product) => escapeHtml(product.name)).join(' + ')}</strong>`
-    : '';
+    : info.hasMissingProducts
+      ? '<strong>Article retiré du stock</strong>'
+      : '';
   return `
     <div class="stock-match-line ${info.confidence}">
       <span>${label}</span>

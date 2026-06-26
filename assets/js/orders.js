@@ -160,8 +160,12 @@ function stockStatusMarkup(sale) {
   }
 
   const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
-  if (info.products.length === 0 && !info.hasPurchaseOverride) {
+  if (info.products.length === 0 && !info.hasPurchaseOverride && !info.hasMissingProducts) {
     return '<span class="stock-order-line missing">Aucun article stock associé</span>';
+  }
+
+  if (info.hasMissingProducts && info.products.length === 0 && !info.hasPurchaseOverride) {
+    return '<span class="stock-order-line manual">Stock validé : article retiré du stock · Ajoute un prix manuel</span>';
   }
 
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
@@ -174,7 +178,9 @@ function stockStatusMarkup(sale) {
         : 'Prix manuel';
   const productLabel = info.products.length > 0
     ? ` : ${info.products.map((product) => escapeHtml(product.name || 'Article stock')).join(' + ')}`
-    : '';
+    : info.hasMissingProducts
+      ? ' : article retiré du stock'
+      : '';
   return `
     <span class="stock-order-line ${info.confidence}">
       ${label}${productLabel}
