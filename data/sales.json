@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_241eabc8169c",
+    "sourceMessageId": "<0102019f03c9c90c-86c12c28-61d3-4a7a-8793-c599847a1ec3-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "jess160208",
+    "rawTitle": "Robe longue moulante neuf noire fendue pour femme",
+    "normalizedTitle": "robe longue moulante neuf noire fendue pour femme",
+    "priceCents": 2500,
+    "priceFormatted": "25,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-26T11:56:23.000Z",
+    "createdAt": "2026-06-26T11:57:25.309Z",
+    "updatedAt": "2026-06-26T11:57:25.321Z"
+  },
+  {
     "id": "sale_c82d25d05853",
     "sourceMessageId": "<0102019f03b1a9aa-8e351b95-ce5a-4ee0-9b18-7833e8133121-000000@eu-west-1.amazonses.com>",
     "accountName": "chloe_lsv",
