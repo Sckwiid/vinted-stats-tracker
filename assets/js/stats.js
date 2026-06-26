@@ -105,15 +105,37 @@ function isLotSale(sale, group = null) {
   return /\blots?\b/i.test(saleTextForLotDetection(sale, group));
 }
 
+function savedGroupPurchaseCents(groupOrId) {
+  const purchasePrices = loadPurchasePrices();
+  const key = typeof groupOrId === 'string' ? groupOrId : groupOrId?.id;
+  if (!key) return 0;
+  return Math.round((Number(purchasePrices[key]) || 0) * 100);
+}
+
+function salePurchaseCents(sale, group = null) {
+  const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  if (stockInfo.purchaseCents > 0) return stockInfo.purchaseCents;
+  return savedGroupPurchaseCents(group || sale.groupId);
+}
+
+function salesPurchaseCents(sales, groupsById = new Map()) {
+  return sales.reduce((sum, sale) => {
+    const group = sale.groupId ? groupsById.get(sale.groupId) : null;
+    return sum + salePurchaseCents(sale, group);
+  }, 0);
+}
+
 function summarizeSales(label, sales, group = null) {
   const prices = sales.map((sale) => Number(sale.priceCents || 0));
   const total = prices.reduce((sum, price) => sum + price, 0);
   const lastSale = [...sales].sort((a, b) => new Date(b.soldAt) - new Date(a.soldAt))[0] || null;
   const accounts = [...new Set(sales.map((sale) => sale.accountName).filter(Boolean))];
-
-  const purchasePrices = loadPurchasePrices();
-  const purchaseCents = group?.purchaseCentsOverride ?? Math.round((Number(purchasePrices[group?.id || label]) || 0) * 100);
+  const groupsById = new Map(state.groups.map((item) => [item.id, item]));
+  const purchaseCents = group?.purchaseCentsOverride ?? salesPurchaseCents(sales, groupsById);
   const profit = total - purchaseCents;
+  const imageStockProduct = sales
+    .map((sale) => saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides).products[0])
+    .find(Boolean) || null;
 
   return {
     id: group?.id || 'ungrouped',
@@ -127,6 +149,7 @@ function summarizeSales(label, sales, group = null) {
     lastSale,
     accounts,
     imagePath: group?.mainImagePath || lastSale?.imagePath || null,
+    imageStockProduct,
     purchaseCents,
     profit,
     saleDates: [...sales]
@@ -140,17 +163,13 @@ function buildSummaries() {
   const groupsById = new Map(state.groups.map((group) => [group.id, group]));
   const lotSales = sales.filter((sale) => isLotSale(sale, sale.groupId ? groupsById.get(sale.groupId) : null));
   const nonLotSales = sales.filter((sale) => !isLotSale(sale, sale.groupId ? groupsById.get(sale.groupId) : null));
-  const purchasePrices = loadPurchasePrices();
   const summaries = state.groups.map((group) => {
     const groupSales = nonLotSales.filter((sale) => sale.groupId === group.id);
     return summarizeSales(group.name, groupSales, group);
   });
 
   if (lotSales.length > 0) {
-    const lotGroupIds = [...new Set(lotSales.map((sale) => sale.groupId).filter(Boolean))];
-    const lotPurchaseCents = lotGroupIds.reduce((sum, groupId) => {
-      return sum + Math.round((Number(purchasePrices[groupId]) || 0) * 100);
-    }, 0);
+    const lotPurchaseCents = salesPurchaseCents(lotSales, groupsById);
     summaries.push(summarizeSales('Lots', lotSales, {
       id: 'auto-lots',
       name: 'Lots',
@@ -195,12 +214,8 @@ function renderSummary() {
   const total = prices.reduce((sum, price) => sum + price, 0);
   const finished = sales.filter((sale) => sale.status === 'finished');
 
-  const purchasePrices = loadPurchasePrices();
-  const totalPurchase = state.groups.reduce((sum, group) => {
-    const hasSales = sales.some((s) => s.groupId === group.id);
-    if (!hasSales) return sum;
-    return sum + Math.round((Number(purchasePrices[group.id]) || 0) * 100);
-  }, 0);
+  const groupsById = new Map(state.groups.map((group) => [group.id, group]));
+  const totalPurchase = salesPurchaseCents(sales, groupsById);
   const profit = total - totalPurchase;
 
   elements.summary.innerHTML = `
@@ -391,13 +406,14 @@ function renderStats() {
   elements.list.innerHTML = summaries
     .map((summary) => {
       const imageSale = { imagePath: summary.imagePath, rawTitle: summary.label };
+      const imageMarkup = summary.imageStockProduct ? productImageMarkup(summary.imageStockProduct) : saleImageMarkup(imageSale, summary.label);
       const profitClass = summary.profit >= 0 ? 'profit-positive' : 'profit-negative';
       const profitLabel = summary.purchaseCents > 0
         ? `<span class="${profitClass}">Bénéfice <strong>${formatMoney(summary.profit)}</strong></span>`
         : `<span class="muted">Bénéfice <strong>—</strong></span>`;
       return `
         <article class="stats-card">
-          <div class="group-image">${saleImageMarkup(imageSale, summary.label)}</div>
+          <div class="group-image">${imageMarkup}</div>
           <div>
             <h2>${escapeHtml(summary.label)}</h2>
             <div class="stats-grid">

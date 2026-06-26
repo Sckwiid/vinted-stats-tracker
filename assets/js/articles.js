@@ -6,6 +6,7 @@ const {
   formatDate,
   formatMoney,
   loadDashboardData,
+  loadSalePurchaseOverrides,
   normalizeClientText,
   renderError,
   saleImageMarkup,
@@ -57,6 +58,7 @@ const state = {
   groups: [],
   stockProducts: [],
   stockMatches: {},
+  purchaseOverrides: {},
   stockReviewOpen: false
 };
 
@@ -101,7 +103,11 @@ function saveStockMatches() {
 function productImages(product) {
   const images = Array.isArray(product.images) ? product.images : [];
   const photo = product.photo ? [product.photo] : [];
-  return [...images, ...photo].map((image) => String(image || '').trim()).filter(Boolean);
+  const imageUrl = product.imageUrl ? [product.imageUrl] : [];
+  const temuImageUrl = product.temu?.imageUrl ? [product.temu.imageUrl] : [];
+  return [...images, ...photo, ...imageUrl, ...temuImageUrl]
+    .map((image) => String(image || '').trim())
+    .filter(Boolean);
 }
 
 function productImageMarkup(product) {
@@ -186,14 +192,19 @@ function autoStockMatches(sale) {
 
 function saleStockMatchInfo(sale) {
   const products = autoStockMatches(sale).filter(Boolean);
-  const purchaseCents = products.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
+  const stockPurchaseCentsTotal = products.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
+  const override = state.purchaseOverrides[sale.id];
+  const overrideCents = override === '' || override === undefined || override === null
+    ? null
+    : Math.round(Number(override) * 100);
+  const purchaseCents = Number.isFinite(overrideCents) ? overrideCents : stockPurchaseCentsTotal;
   const confidence = Array.isArray(state.stockMatches[sale.id])
     ? 'manual'
     : products.length > 0
       ? 'auto'
       : 'missing';
 
-  return { products, purchaseCents, confidence };
+  return { products, purchaseCents, confidence, hasPurchaseOverride: Number.isFinite(overrideCents) };
 }
 
 function stockOptions(selectedId = '') {
@@ -210,16 +221,23 @@ function stockMatchSummaryMarkup(sale) {
   if (state.stockProducts.length === 0) {
     return '<p class="stock-match-line missing">Stock non chargé : ouvre d’abord la page Stocks sur ce navigateur.</p>';
   }
-  if (info.products.length === 0) {
+  if (info.products.length === 0 && !info.hasPurchaseOverride) {
     return '<p class="stock-match-line missing">Aucune correspondance stock détectée. Clique sur “Vérifier les correspondances stock”.</p>';
   }
 
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
-  const label = info.confidence === 'manual' ? 'Validé manuellement' : 'Détecté automatiquement';
+  const label = info.confidence === 'manual'
+    ? 'Validé manuellement'
+    : info.products.length > 0
+      ? 'Détecté automatiquement'
+      : 'Prix manuel';
+  const productsText = info.products.length > 0
+    ? `<strong>${info.products.map((product) => escapeHtml(product.name)).join(' + ')}</strong>`
+    : '';
   return `
     <div class="stock-match-line ${info.confidence}">
       <span>${label}</span>
-      <strong>${info.products.map((product) => escapeHtml(product.name)).join(' + ')}</strong>
+      ${productsText}
       <span>Achat ${formatMoney(info.purchaseCents)} · Bénéfice ${formatMoney(profit)}</span>
     </div>
   `;
@@ -400,6 +418,7 @@ function renderUngrouped() {
 function render() {
   state.stockProducts = loadStockProducts();
   state.stockMatches = loadStockMatches();
+  state.purchaseOverrides = loadSalePurchaseOverrides();
   renderGroups();
   renderUngrouped();
   renderStockReview();

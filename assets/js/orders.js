@@ -44,6 +44,13 @@ function mergeSale(saleId, payload) {
   });
 }
 
+function createManualSale(payload) {
+  return Common.apiRequest('/api/sales', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
 const state = {
   sales: [],
   groups: [],
@@ -67,6 +74,9 @@ const elements = {
   poll: document.querySelector('[data-poll]'),
   bulkPrepared: document.querySelector('[data-bulk-prepared]'),
   bulkSent: document.querySelector('[data-bulk-sent]'),
+  manualSaleOpen: document.querySelector('[data-manual-sale-open]'),
+  manualSaleModal: document.querySelector('[data-manual-sale-modal]'),
+  manualSaleForm: document.querySelector('[data-manual-sale-form]'),
   modal: document.querySelector('[data-merge-modal]'),
   stockModal: document.querySelector('[data-stock-modal]'),
   stockForm: document.querySelector('[data-stock-form]'),
@@ -146,15 +156,18 @@ function stockStatusMarkup(sale) {
   }
 
   const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
-  if (info.products.length === 0) {
+  if (info.products.length === 0 && !info.hasPurchaseOverride) {
     return '<span class="stock-order-line missing">Aucun article stock associé</span>';
   }
 
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
-  const label = info.confidence === 'manual' ? 'Stock validé' : 'Stock détecté';
+  const label = info.confidence === 'manual' ? 'Stock validé' : info.products.length > 0 ? 'Stock détecté' : 'Prix manuel';
+  const productLabel = info.products.length > 0
+    ? ` : ${info.products.map((product) => escapeHtml(product.name || 'Article stock')).join(' + ')}`
+    : '';
   return `
     <span class="stock-order-line ${info.confidence}">
-      ${label} : ${info.products.map((product) => escapeHtml(product.name || 'Article stock')).join(' + ')}
+      ${label}${productLabel}
       · Achat ${formatMoney(info.purchaseCents)}
       · Bénéfice ${formatMoney(profit)}
     </span>
@@ -335,6 +348,46 @@ function closeMergeModal() {
   elements.mergeForm.reset();
 }
 
+function openManualSaleModal() {
+  if (!elements.manualSaleModal || !elements.manualSaleForm) return;
+  elements.manualSaleForm.reset();
+  const soldAtInput = elements.manualSaleForm.elements.soldAt;
+  if (soldAtInput) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    soldAtInput.value = now.toISOString().slice(0, 16);
+  }
+  elements.manualSaleModal.hidden = false;
+}
+
+function closeManualSaleModal() {
+  if (!elements.manualSaleModal || !elements.manualSaleForm) return;
+  elements.manualSaleModal.hidden = true;
+  elements.manualSaleForm.reset();
+}
+
+function manualSalePayloadFromForm(form) {
+  const price = Number(String(form.elements.price.value || '').replace(',', '.'));
+  if (!Number.isFinite(price) || price < 0) {
+    throw new Error('Prix de vente invalide');
+  }
+
+  const soldAtValue = form.elements.soldAt.value;
+  const soldAt = soldAtValue ? new Date(soldAtValue).toISOString() : new Date().toISOString();
+
+  return {
+    rawTitle: form.elements.rawTitle.value.trim(),
+    priceCents: Math.round(price * 100),
+    priceFormatted: formatMoney(Math.round(price * 100)),
+    buyerUsername: form.elements.buyerUsername.value.trim(),
+    accountName: form.elements.accountName.value.trim(),
+    soldAt,
+    status: form.elements.status.value || 'todo',
+    imagePath: form.elements.imagePath.value.trim(),
+    source: 'manual'
+  };
+}
+
 async function loadAndRender() {
   try {
     const data = await loadDashboardData();
@@ -357,10 +410,6 @@ async function updateVisibleSalesStatus(status) {
     showToast('Aucune commande à modifier');
     return;
   }
-
-  const label = STATUS_LABELS[status] || status;
-  const confirmed = window.confirm(`Passer ${sales.length} commande(s) affichée(s) en "${label}" ?`);
-  if (!confirmed) return;
 
   for (const button of [elements.bulkPrepared, elements.bulkSent]) {
     if (button) button.disabled = true;
@@ -423,6 +472,7 @@ for (const element of [elements.search, elements.status, elements.account, eleme
 elements.refresh.addEventListener('click', loadAndRender);
 if (elements.bulkPrepared) elements.bulkPrepared.addEventListener('click', () => updateVisibleSalesStatus('prepared'));
 if (elements.bulkSent) elements.bulkSent.addEventListener('click', () => updateVisibleSalesStatus('sent'));
+if (elements.manualSaleOpen) elements.manualSaleOpen.addEventListener('click', openManualSaleModal);
 elements.poll.addEventListener('click', async () => {
   elements.poll.disabled = true;
   try {
@@ -440,6 +490,41 @@ elements.groupSearch.addEventListener('input', renderGroupChoices);
 elements.modal.addEventListener('click', (event) => {
   if (event.target.matches('[data-close-modal]')) closeMergeModal();
 });
+
+if (elements.manualSaleModal) {
+  elements.manualSaleModal.addEventListener('click', (event) => {
+    if (event.target.matches('[data-close-manual-sale-modal]')) closeManualSaleModal();
+  });
+}
+
+if (elements.manualSaleForm) {
+  elements.manualSaleForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submitButton = elements.manualSaleForm.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const payload = manualSalePayloadFromForm(elements.manualSaleForm);
+      if (!payload.rawTitle) {
+        showToast('Titre Vinted obligatoire', 'error');
+        return;
+      }
+      const result = await createManualSale(payload);
+      if (result.sale) {
+        state.sales.unshift(result.sale);
+      }
+      closeManualSaleModal();
+      renderFilters();
+      renderOrders();
+      showToast('Vente manuelle ajoutée');
+      await loadAndRender();
+    } catch (error) {
+      showToast(error.message, 'error');
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
 
 if (elements.stockSearch) {
   elements.stockSearch.addEventListener('input', (event) => {

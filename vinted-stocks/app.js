@@ -93,7 +93,8 @@ const refs = {
   statProducts: document.getElementById("statProducts"),
   statAvailable: document.getElementById("statAvailable"),
   statLow: document.getElementById("statLow"),
-  statListed: document.getElementById("statListed")
+  statListed: document.getElementById("statListed"),
+  statStockValue: document.getElementById("statStockValue")
 };
 
 void init();
@@ -1332,11 +1333,17 @@ function renderStats() {
   const totalAvailable = state.products.reduce((sum, product) => sum + getAvailableStock(product), 0);
   const totalLow = state.products.filter((product) => isLowStock(product)).length;
   const totalListed = state.products.reduce((sum, product) => sum + Number(product.listedQuantity || 0), 0);
+  const totalStockValue = state.products.reduce((sum, product) => {
+    const purchasePrice = Number(product.purchasePrice || 0);
+    const totalStock = Number(product.totalStock || 0);
+    return sum + (Number.isFinite(purchasePrice) ? purchasePrice : 0) * totalStock;
+  }, 0);
 
   refs.statProducts.textContent = String(totalProducts);
   refs.statAvailable.textContent = String(totalAvailable);
   refs.statLow.textContent = String(totalLow);
   refs.statListed.textContent = String(totalListed);
+  if (refs.statStockValue) refs.statStockValue.textContent = formatPrice(totalStockValue);
 }
 
 function renderTable() {

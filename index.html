@@ -50,6 +50,7 @@
         <button class="secondary" data-refresh type="button">Rafraîchir</button>
         <button class="secondary" data-bulk-prepared type="button">Tout préparer</button>
         <button class="secondary" data-bulk-sent type="button">Tout envoyer</button>
+        <button class="secondary" data-manual-sale-open type="button">Vente manuelle</button>
         <button data-poll type="button">Vérifier Gmail</button>
       </section>
 
@@ -94,6 +95,34 @@
           <div class="modal-actions">
             <button class="secondary" type="button" data-close-stock-modal>Annuler</button>
             <button type="submit">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="modal-backdrop" data-manual-sale-modal hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="manual-sale-title">
+        <div class="modal-header">
+          <h2 id="manual-sale-title">Ajouter une vente manuelle</h2>
+          <button class="secondary" type="button" data-close-manual-sale-modal>Fermer</button>
+        </div>
+        <form data-manual-sale-form>
+          <input name="rawTitle" type="text" placeholder="Titre Vinted" required>
+          <input name="price" type="number" min="0" step="0.01" placeholder="Prix de vente (€)" required>
+          <input name="buyerUsername" type="text" placeholder="Acheteur">
+          <input name="accountName" type="text" placeholder="Compte Vinted">
+          <input name="soldAt" type="datetime-local">
+          <select name="status">
+            <option value="todo">Pas encore préparé</option>
+            <option value="prepared">Préparé</option>
+            <option value="sent">Envoyé</option>
+            <option value="finished">Terminé</option>
+          </select>
+          <input name="imagePath" type="url" placeholder="URL image (optionnel)">
+          <div class="modal-actions">
+            <button class="secondary" type="button" data-close-manual-sale-modal>Annuler</button>
+            <button type="submit">Ajouter</button>
           </div>
         </form>
       </div>
