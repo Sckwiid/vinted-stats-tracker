@@ -7,6 +7,7 @@ const {
   formatMoney,
   loadSalePurchaseOverrides,
   loadDashboardData,
+  loadStockIgnored,
   loadStockMatches,
   loadStockProducts,
   productImageMarkup,
@@ -44,6 +45,7 @@ const state = {
   groups: [],
   stockProducts: [],
   stockMatches: {},
+  stockIgnored: {},
   purchaseOverrides: {},
   chartMode: 'time',
   periodDays: null
@@ -113,7 +115,7 @@ function savedGroupPurchaseCents(groupOrId) {
 }
 
 function salePurchaseCents(sale, group = null) {
-  const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
   if (stockInfo.purchaseCents > 0) return stockInfo.purchaseCents;
   return savedGroupPurchaseCents(group || sale.groupId);
 }
@@ -134,7 +136,7 @@ function summarizeSales(label, sales, group = null) {
   const purchaseCents = group?.purchaseCentsOverride ?? salesPurchaseCents(sales, groupsById);
   const profit = total - purchaseCents;
   const imageStockProduct = sales
-    .map((sale) => saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides).products[0])
+    .map((sale) => saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored).products[0])
     .find(Boolean) || null;
 
   return {
@@ -315,7 +317,7 @@ function articleRankingItems() {
 
     item.count += 1;
     item.total += Number(sale.priceCents || 0);
-    const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+    const stockInfo = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
     if (!item.imageProduct && stockInfo.products[0]) {
       item.imageProduct = stockInfo.products[0];
     }
@@ -446,6 +448,7 @@ async function loadAndRender() {
     state.groups = data.groups;
     state.stockProducts = loadStockProducts();
     state.stockMatches = loadStockMatches();
+    state.stockIgnored = loadStockIgnored();
     state.purchaseOverrides = loadSalePurchaseOverrides();
     renderStats();
   } catch (error) {

@@ -33,6 +33,7 @@ function renameGroup(groupId, name) {
 const PURCHASE_PRICES_KEY = 'vinted-purchase-prices';
 const STOCK_PRODUCTS_KEY = 'vinted_stocks_data_v1';
 const STOCK_MATCHES_KEY = 'vinted-stock-sale-matches';
+const STOCK_IGNORED_KEY = 'vinted-stock-sale-ignored';
 
 function loadPurchasePrices() {
   try {
@@ -58,6 +59,7 @@ const state = {
   groups: [],
   stockProducts: [],
   stockMatches: {},
+  stockIgnored: {},
   purchaseOverrides: {},
   stockReviewOpen: false
 };
@@ -100,6 +102,19 @@ function saveStockMatches() {
   localStorage.setItem(STOCK_MATCHES_KEY, JSON.stringify(state.stockMatches));
 }
 
+function loadStockIgnored() {
+  try {
+    const ignored = JSON.parse(localStorage.getItem(STOCK_IGNORED_KEY) || '{}');
+    return ignored && typeof ignored === 'object' ? ignored : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveStockIgnored() {
+  localStorage.setItem(STOCK_IGNORED_KEY, JSON.stringify(state.stockIgnored));
+}
+
 function productImages(product) {
   const images = Array.isArray(product.images) ? product.images : [];
   const photo = product.photo ? [product.photo] : [];
@@ -136,18 +151,79 @@ function saleSearchText(sale) {
   return normalizeClientText([sale.rawTitle, sale.normalizedTitle].filter(Boolean).join(' '));
 }
 
+const STOCK_MATCH_STOPWORDS = new Set([
+  'femme', 'femmes', 'homme', 'hommes', 'pour', 'avec', 'sans', 'neuf', 'neuve', 'nouveau', 'nouvelle',
+  'ete', 'hiver', 'printemps', 'automne', 'taille', 'tailles', 'mode', 'style', 'adulte', 'adultes',
+  'couleur', 'unie', 'uni', 'vacances', 'decontracte', 'decontractee', 'confortable', 'tenue', 'vetement',
+  'vetements', 'piece', 'pieces', 'lot', 'lots', 'pack', 'ideal', 'parfait', 'parfaite', 'nouvel', 'haute'
+]);
+
+const STOCK_MATCH_SYNONYMS = new Map([
+  ['debardeur', 'top'],
+  ['debardeurs', 'top'],
+  ['haut', 'top'],
+  ['hauts', 'top'],
+  ['tshirt', 'tee'],
+  ['shirt', 'tee'],
+  ['shirts', 'tee'],
+  ['tee', 'tee'],
+  ['teeshirt', 'tee'],
+  ['teeshirts', 'tee'],
+  ['camisole', 'top'],
+  ['caraco', 'top'],
+  ['combishort', 'combinaison'],
+  ['barboteuse', 'combinaison'],
+  ['shorts', 'short'],
+  ['jupe', 'robe'],
+  ['marron', 'brown'],
+  ['brun', 'brown'],
+  ['brune', 'brown'],
+  ['rouge', 'red'],
+  ['noir', 'black'],
+  ['noire', 'black'],
+  ['blanc', 'white'],
+  ['blanche', 'white'],
+  ['vert', 'green'],
+  ['verte', 'green'],
+  ['beige', 'beige'],
+  ['rose', 'pink'],
+  ['leopard', 'leopard']
+]);
+
+const STOCK_MATCH_COLORS = new Set(['black', 'white', 'red', 'green', 'beige', 'pink', 'brown', 'bleu', 'blue', 'gris', 'gray', 'grey', 'leopard']);
+const STOCK_MATCH_CATEGORIES = new Set(['robe', 'top', 'short', 'ensemble', 'combinaison', 'tee', 'jupe', 'pantalon', 'legging', 'pull', 'gilet']);
+
+function stockMatchTokens(value = '') {
+  return normalizeClientText(value)
+    .split(' ')
+    .map((token) => STOCK_MATCH_SYNONYMS.get(token) || token)
+    .filter((token) => token.length > 2 && !STOCK_MATCH_STOPWORDS.has(token));
+}
+
 function stockScore(query, product) {
-  const productText = stockSearchText(product);
-  const queryText = normalizeClientText(query);
-  if (!queryText || !productText) return 0;
-  if (productText.includes(queryText) || queryText.includes(productText)) return 100;
+  const queryTokens = [...new Set(stockMatchTokens(query))];
+  const productTokens = [...new Set(stockMatchTokens(stockSearchText(product)))];
+  if (queryTokens.length === 0 || productTokens.length === 0) return 0;
 
-  const queryTokens = queryText.split(' ').filter((token) => token.length > 2);
-  if (queryTokens.length === 0) return 0;
+  const productSet = new Set(productTokens);
+  const matchedTokens = queryTokens.filter((token) => productSet.has(token));
+  if (matchedTokens.length === 0) return 0;
 
-  const matched = queryTokens.filter((token) => productText.includes(token));
-  const coverage = matched.length / queryTokens.length;
-  return Math.round(coverage * 90) + Math.min(matched.length, 10);
+  const queryColors = queryTokens.filter((token) => STOCK_MATCH_COLORS.has(token));
+  const queryCategories = queryTokens.filter((token) => STOCK_MATCH_CATEGORIES.has(token));
+  const matchedColors = queryColors.filter((token) => productSet.has(token));
+  const matchedCategories = queryCategories.filter((token) => productSet.has(token));
+
+  const coverage = matchedTokens.length / queryTokens.length;
+  let score = Math.round(coverage * 82) + matchedTokens.length * 7;
+
+  if (queryCategories.length > 0 && matchedCategories.length === 0) score -= 35;
+  if (queryColors.length > 0 && matchedColors.length === 0) score -= 28;
+  score += matchedCategories.length * 14;
+  score += matchedColors.length * 12;
+
+  if (queryTokens.length <= 3 && coverage === 1) score += 18;
+  return Math.max(0, Math.min(score, 100));
 }
 
 function bestStockMatch(query, excludedIds = []) {
@@ -159,7 +235,7 @@ function bestStockMatch(query, excludedIds = []) {
 }
 
 function saleLooksLikeLot(sale) {
-  return /\b(et|lot|lots|ensemble)\b/i.test(saleSearchText(sale));
+  return /(?:\+|&|\b(et|lot|lots|ensemble|pack|duo)\b)/i.test(saleSearchText(sale));
 }
 
 function saleStockSegments(sale) {
@@ -181,6 +257,8 @@ function autoStockMatches(sale) {
     return manualIds.map((productId) => state.stockProducts.find((product) => product.id === productId) || null);
   }
 
+  if (state.stockIgnored[sale.id]) return [];
+
   const matches = [];
   for (const segment of saleStockSegments(sale)) {
     const match = bestStockMatch(segment, matches.map((item) => item.product.id));
@@ -200,11 +278,13 @@ function saleStockMatchInfo(sale) {
   const purchaseCents = Number.isFinite(overrideCents) ? overrideCents : stockPurchaseCentsTotal;
   const confidence = Array.isArray(state.stockMatches[sale.id])
     ? 'manual'
-    : products.length > 0
-      ? 'auto'
-      : 'missing';
+    : state.stockIgnored[sale.id]
+      ? 'ignored'
+      : products.length > 0
+        ? 'auto'
+        : 'missing';
 
-  return { products, purchaseCents, confidence, hasPurchaseOverride: Number.isFinite(overrideCents) };
+  return { products, purchaseCents, confidence, hasPurchaseOverride: Number.isFinite(overrideCents), ignored: Boolean(state.stockIgnored[sale.id]) };
 }
 
 function stockOptions(selectedId = '') {
@@ -228,9 +308,11 @@ function stockMatchSummaryMarkup(sale) {
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
   const label = info.confidence === 'manual'
     ? 'Validé manuellement'
-    : info.products.length > 0
-      ? 'Détecté automatiquement'
-      : 'Prix manuel';
+    : info.confidence === 'ignored'
+      ? 'Stock ignoré'
+      : info.products.length > 0
+        ? 'Détecté automatiquement'
+        : 'Prix manuel';
   const productsText = info.products.length > 0
     ? `<strong>${info.products.map((product) => escapeHtml(product.name)).join(' + ')}</strong>`
     : '';
@@ -418,6 +500,7 @@ function renderUngrouped() {
 function render() {
   state.stockProducts = loadStockProducts();
   state.stockMatches = loadStockMatches();
+  state.stockIgnored = loadStockIgnored();
   state.purchaseOverrides = loadSalePurchaseOverrides();
   renderGroups();
   renderUngrouped();
@@ -448,6 +531,7 @@ elements.stockReview.addEventListener('submit', (event) => {
 
   const saleId = form.dataset.stockMatchForm;
   const productIds = [form.productA.value, form.productB.value].filter(Boolean);
+  delete state.stockIgnored[saleId];
   if (productIds.length === 0) {
     delete state.stockMatches[saleId];
   } else {
@@ -455,6 +539,7 @@ elements.stockReview.addEventListener('submit', (event) => {
   }
 
   saveStockMatches();
+  saveStockIgnored();
   render();
   showToast('Correspondance stock enregistrée');
 });

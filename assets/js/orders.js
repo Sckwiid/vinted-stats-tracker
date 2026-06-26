@@ -10,6 +10,7 @@ const {
   groupById,
   loadDashboardData,
   loadSalePurchaseOverrides,
+  loadStockIgnored,
   loadStockMatches,
   loadStockProducts,
   normalizeClientText,
@@ -18,6 +19,7 @@ const {
   saleImageMarkup,
   saleStockMatchInfo,
   saveSalePurchaseOverrides,
+  saveStockIgnored,
   saveStockMatches,
   setupShell,
   showToast,
@@ -56,6 +58,7 @@ const state = {
   groups: [],
   stockProducts: [],
   stockMatches: {},
+  stockIgnored: {},
   purchaseOverrides: {},
   meta: null,
   selectedSaleId: null,
@@ -84,6 +87,7 @@ const elements = {
   stockSearch: document.querySelector('[data-stock-search]'),
   stockFields: document.querySelector('[data-stock-fields]'),
   stockPurchase: document.querySelector('[data-stock-purchase]'),
+  stockIgnore: document.querySelector('[data-stock-ignore]'),
   stockSelectedList: document.querySelector('[data-stock-selected-list]'),
   mergeForm: document.querySelector('[data-merge-form]'),
   groupSearch: document.querySelector('[data-group-search]'),
@@ -146,7 +150,7 @@ function renderSummary(sales) {
 }
 
 function saleStockImageMarkup(sale) {
-  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
   return info.products[0] ? productImageMarkup(info.products[0]) : saleImageMarkup(sale);
 }
 
@@ -155,13 +159,19 @@ function stockStatusMarkup(sale) {
     return '<span class="stock-order-line missing">Stock non chargé</span>';
   }
 
-  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
   if (info.products.length === 0 && !info.hasPurchaseOverride) {
     return '<span class="stock-order-line missing">Aucun article stock associé</span>';
   }
 
   const profit = Number(sale.priceCents || 0) - info.purchaseCents;
-  const label = info.confidence === 'manual' ? 'Stock validé' : info.products.length > 0 ? 'Stock détecté' : 'Prix manuel';
+  const label = info.confidence === 'manual'
+    ? 'Stock validé'
+    : info.confidence === 'ignored'
+      ? 'Stock ignoré'
+      : info.products.length > 0
+        ? 'Stock détecté'
+        : 'Prix manuel';
   const productLabel = info.products.length > 0
     ? ` : ${info.products.map((product) => escapeHtml(product.name || 'Article stock')).join(' + ')}`
     : '';
@@ -223,7 +233,7 @@ function renderOrders() {
 }
 
 function selectedStockIdsForSale(sale) {
-  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
   const selectedIds = Array.isArray(state.stockMatches[sale.id])
     ? state.stockMatches[sale.id]
     : info.products.map((product) => product.id);
@@ -292,12 +302,13 @@ function openStockModal(saleId) {
   const sale = state.sales.find((item) => item.id === saleId);
   if (!sale || !elements.stockModal) return;
 
-  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides);
+  const info = saleStockMatchInfo(sale, state.stockProducts, state.stockMatches, state.purchaseOverrides, state.stockIgnored);
   state.selectedStockSaleId = saleId;
   state.stockSearch = '';
   elements.stockTitle.textContent = sale.rawTitle || 'Vente';
   elements.stockSearch.value = '';
   elements.stockPurchase.value = info.hasPurchaseOverride ? String(state.purchaseOverrides[sale.id]) : '';
+  if (elements.stockIgnore) elements.stockIgnore.checked = Boolean(state.stockIgnored[sale.id]);
   renderStockFields();
   elements.stockModal.hidden = false;
 }
@@ -395,6 +406,7 @@ async function loadAndRender() {
     state.groups = data.groups;
     state.stockProducts = loadStockProducts();
     state.stockMatches = loadStockMatches();
+    state.stockIgnored = loadStockIgnored();
     state.purchaseOverrides = loadSalePurchaseOverrides();
     state.meta = data.meta;
     renderFilters();
@@ -545,6 +557,8 @@ if (elements.stockFields) {
     if (!card || !state.selectedStockSaleId) return;
 
     const productId = card.dataset.stockProductId;
+    if (elements.stockIgnore) elements.stockIgnore.checked = false;
+    delete state.stockIgnored[state.selectedStockSaleId];
     const current = selectedStockIdsForSale({ id: state.selectedStockSaleId });
     const next = current.includes(productId)
       ? current.filter((id) => id !== productId)
@@ -581,12 +595,19 @@ if (elements.stockForm) {
     const saleId = state.selectedStockSaleId;
     if (!saleId) return;
 
-    const productIds = selectedStockIdsForSale({ id: saleId });
+    const ignoreStock = Boolean(elements.stockIgnore?.checked);
+    const productIds = ignoreStock ? [] : selectedStockIdsForSale({ id: saleId });
 
-    if (productIds.length === 0) {
+    if (ignoreStock) {
+      state.stockIgnored[saleId] = true;
       delete state.stockMatches[saleId];
     } else {
-      state.stockMatches[saleId] = [...new Set(productIds)];
+      delete state.stockIgnored[saleId];
+      if (productIds.length === 0) {
+        delete state.stockMatches[saleId];
+      } else {
+        state.stockMatches[saleId] = [...new Set(productIds)];
+      }
     }
 
     const purchaseValue = elements.stockPurchase.value.trim().replace(',', '.');
@@ -602,6 +623,7 @@ if (elements.stockForm) {
     }
 
     saveStockMatches(state.stockMatches);
+    saveStockIgnored(state.stockIgnored);
     saveSalePurchaseOverrides(state.purchaseOverrides);
     closeStockModal();
     renderOrders();

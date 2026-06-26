@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
 export const STOCK_PRODUCTS_KEY = 'vinted_stocks_data_v1';
 export const STOCK_MATCHES_KEY = 'vinted-stock-sale-matches';
 export const SALE_PURCHASE_OVERRIDES_KEY = 'vinted-sale-purchase-overrides';
+export const STOCK_IGNORED_KEY = 'vinted-stock-sale-ignored';
 
 export const STATUS_LABELS = {
   todo: 'Pas encore préparé',
@@ -182,6 +183,19 @@ export function saveSalePurchaseOverrides(overrides) {
   localStorage.setItem(SALE_PURCHASE_OVERRIDES_KEY, JSON.stringify(overrides || {}));
 }
 
+export function loadStockIgnored() {
+  try {
+    const ignored = JSON.parse(localStorage.getItem(STOCK_IGNORED_KEY) || '{}');
+    return ignored && typeof ignored === 'object' ? ignored : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveStockIgnored(ignored) {
+  localStorage.setItem(STOCK_IGNORED_KEY, JSON.stringify(ignored || {}));
+}
+
 export function productImages(product) {
   const images = Array.isArray(product?.images) ? product.images : [];
   const photo = product?.photo ? [product.photo] : [];
@@ -219,7 +233,7 @@ export function saleSearchText(sale) {
 }
 
 export function saleLooksLikeLot(sale) {
-  return /\b(et|lot|lots|ensemble|pack|duo)\b/i.test(saleSearchText(sale));
+  return /(?:\+|&|\b(et|lot|lots|ensemble|pack|duo)\b)/i.test(saleSearchText(sale));
 }
 
 export function saleStockSegments(sale) {
@@ -235,18 +249,79 @@ export function saleStockSegments(sale) {
   return [title];
 }
 
+const STOCK_MATCH_STOPWORDS = new Set([
+  'femme', 'femmes', 'homme', 'hommes', 'pour', 'avec', 'sans', 'neuf', 'neuve', 'nouveau', 'nouvelle',
+  'ete', 'hiver', 'printemps', 'automne', 'taille', 'tailles', 'mode', 'style', 'adulte', 'adultes',
+  'couleur', 'unie', 'uni', 'vacances', 'decontracte', 'decontractee', 'confortable', 'tenue', 'vetement',
+  'vetements', 'piece', 'pieces', 'lot', 'lots', 'pack', 'ideal', 'parfait', 'parfaite', 'nouvel', 'haute'
+]);
+
+const STOCK_MATCH_SYNONYMS = new Map([
+  ['debardeur', 'top'],
+  ['debardeurs', 'top'],
+  ['haut', 'top'],
+  ['hauts', 'top'],
+  ['tshirt', 'tee'],
+  ['shirt', 'tee'],
+  ['shirts', 'tee'],
+  ['tee', 'tee'],
+  ['teeshirt', 'tee'],
+  ['teeshirts', 'tee'],
+  ['camisole', 'top'],
+  ['caraco', 'top'],
+  ['combishort', 'combinaison'],
+  ['barboteuse', 'combinaison'],
+  ['shorts', 'short'],
+  ['jupe', 'robe'],
+  ['marron', 'brown'],
+  ['brun', 'brown'],
+  ['brune', 'brown'],
+  ['rouge', 'red'],
+  ['noir', 'black'],
+  ['noire', 'black'],
+  ['blanc', 'white'],
+  ['blanche', 'white'],
+  ['vert', 'green'],
+  ['verte', 'green'],
+  ['beige', 'beige'],
+  ['rose', 'pink'],
+  ['leopard', 'leopard']
+]);
+
+const STOCK_MATCH_COLORS = new Set(['black', 'white', 'red', 'green', 'beige', 'pink', 'brown', 'bleu', 'blue', 'gris', 'gray', 'grey', 'leopard']);
+const STOCK_MATCH_CATEGORIES = new Set(['robe', 'top', 'short', 'ensemble', 'combinaison', 'tee', 'jupe', 'pantalon', 'legging', 'pull', 'gilet']);
+
+function stockMatchTokens(value = '') {
+  return normalizeClientText(value)
+    .split(' ')
+    .map((token) => STOCK_MATCH_SYNONYMS.get(token) || token)
+    .filter((token) => token.length > 2 && !STOCK_MATCH_STOPWORDS.has(token));
+}
+
 export function stockScore(query, product) {
-  const productText = stockSearchText(product);
-  const queryText = normalizeClientText(query);
-  if (!queryText || !productText) return 0;
-  if (productText.includes(queryText) || queryText.includes(productText)) return 100;
+  const queryTokens = [...new Set(stockMatchTokens(query))];
+  const productTokens = [...new Set(stockMatchTokens(stockSearchText(product)))];
+  if (queryTokens.length === 0 || productTokens.length === 0) return 0;
 
-  const queryTokens = queryText.split(' ').filter((token) => token.length > 2);
-  if (queryTokens.length === 0) return 0;
+  const productSet = new Set(productTokens);
+  const matchedTokens = queryTokens.filter((token) => productSet.has(token));
+  if (matchedTokens.length === 0) return 0;
 
-  const matched = queryTokens.filter((token) => productText.includes(token));
-  const coverage = matched.length / queryTokens.length;
-  return Math.round(coverage * 90) + Math.min(matched.length, 10);
+  const queryColors = queryTokens.filter((token) => STOCK_MATCH_COLORS.has(token));
+  const queryCategories = queryTokens.filter((token) => STOCK_MATCH_CATEGORIES.has(token));
+  const matchedColors = queryColors.filter((token) => productSet.has(token));
+  const matchedCategories = queryCategories.filter((token) => productSet.has(token));
+
+  const coverage = matchedTokens.length / queryTokens.length;
+  let score = Math.round(coverage * 82) + matchedTokens.length * 7;
+
+  if (queryCategories.length > 0 && matchedCategories.length === 0) score -= 35;
+  if (queryColors.length > 0 && matchedColors.length === 0) score -= 28;
+  score += matchedCategories.length * 14;
+  score += matchedColors.length * 12;
+
+  if (queryTokens.length <= 3 && coverage === 1) score += 18;
+  return Math.max(0, Math.min(score, 100));
 }
 
 export function bestStockMatch(query, products, excludedIds = []) {
@@ -257,11 +332,13 @@ export function bestStockMatch(query, products, excludedIds = []) {
     .sort((a, b) => b.score - a.score)[0] || null;
 }
 
-export function autoStockMatches(sale, products, matches = {}) {
+export function autoStockMatches(sale, products, matches = {}, ignored = {}) {
   const manualIds = matches[sale.id];
   if (Array.isArray(manualIds)) {
     return manualIds.map((productId) => products.find((product) => product.id === productId) || null).filter(Boolean);
   }
+
+  if (ignored[sale.id]) return [];
 
   const detected = [];
   for (const segment of saleStockSegments(sale)) {
@@ -272,8 +349,8 @@ export function autoStockMatches(sale, products, matches = {}) {
   return detected.map((match) => match.product);
 }
 
-export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrides = {}) {
-  const matchedProducts = autoStockMatches(sale, products, matches);
+export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrides = {}, ignored = {}) {
+  const matchedProducts = autoStockMatches(sale, products, matches, ignored);
   const stockPurchase = matchedProducts.reduce((sum, product) => sum + stockPurchaseCents(product), 0);
   const override = purchaseOverrides[sale.id];
   const overrideCents = override === '' || override === undefined || override === null
@@ -282,15 +359,18 @@ export function saleStockMatchInfo(sale, products, matches = {}, purchaseOverrid
   const purchaseCents = Number.isFinite(overrideCents) ? overrideCents : stockPurchase;
   const confidence = Array.isArray(matches[sale.id])
     ? 'manual'
-    : matchedProducts.length > 0
-      ? 'auto'
-      : 'missing';
+    : ignored[sale.id]
+      ? 'ignored'
+      : matchedProducts.length > 0
+        ? 'auto'
+        : 'missing';
 
   return {
     products: matchedProducts,
     purchaseCents,
     stockPurchaseCents: stockPurchase,
     hasPurchaseOverride: Number.isFinite(overrideCents),
+    ignored: Boolean(ignored[sale.id]),
     confidence
   };
 }

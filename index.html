@@ -92,6 +92,10 @@
             Prix d'achat pour cette vente (€)
             <input data-stock-purchase name="purchasePrice" type="number" min="0" step="0.01" placeholder="Laisser vide = prix du stock">
           </label>
+          <label class="checkbox-line stock-ignore-line">
+            <input data-stock-ignore name="ignoreStock" type="checkbox">
+            Ignorer le stock pour cette vente / prix manuel uniquement
+          </label>
           <div class="modal-actions">
             <button class="secondary" type="button" data-close-stock-modal>Annuler</button>
             <button type="submit">Enregistrer</button>
