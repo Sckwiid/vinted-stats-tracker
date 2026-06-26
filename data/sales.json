@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_c82d25d05853",
+    "sourceMessageId": "<0102019f03b1a9aa-8e351b95-ce5a-4ee0-9b18-7833e8133121-000000@eu-west-1.amazonses.com>",
+    "accountName": "chloe_lsv",
+    "buyerUsername": "viooleta8912",
+    "rawTitle": "Top marron côtelé style halter d’été pour femme",
+    "normalizedTitle": "top marron cotele style halter d ete pour femme",
+    "priceCents": 1000,
+    "priceFormatted": "10,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-26T11:30:02.000Z",
+    "createdAt": "2026-06-26T11:31:27.326Z",
+    "updatedAt": "2026-06-26T11:31:27.338Z"
+  },
+  {
     "id": "sale_622dd181df32",
     "sourceMessageId": "<0102019f028778b0-45518a7a-66e2-4dd9-bb2a-1fb4bd2d42e6-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
