@@ -32,6 +32,13 @@ function pollNow() {
   return Common.apiRequest('/api/poll', { method: 'POST' });
 }
 
+function rescanMails() {
+  return Common.apiRequest('/api/poll', {
+    method: 'POST',
+    body: JSON.stringify({ full: true, rescan: true, force: true })
+  });
+}
+
 function updateSaleStatus(saleId, status) {
   return Common.apiRequest(`/api/sales/${encodeURIComponent(saleId)}/status`, {
     method: 'POST',
@@ -75,6 +82,7 @@ const elements = {
   showFinished: document.querySelector('[data-show-finished]'),
   refresh: document.querySelector('[data-refresh]'),
   poll: document.querySelector('[data-poll]'),
+  rescan: document.querySelector('[data-rescan]'),
   bulkPrepared: document.querySelector('[data-bulk-prepared]'),
   bulkSent: document.querySelector('[data-bulk-sent]'),
   manualSaleOpen: document.querySelector('[data-manual-sale-open]'),
@@ -491,6 +499,23 @@ elements.refresh.addEventListener('click', loadAndRender);
 if (elements.bulkPrepared) elements.bulkPrepared.addEventListener('click', () => updateVisibleSalesStatus('prepared'));
 if (elements.bulkSent) elements.bulkSent.addEventListener('click', () => updateVisibleSalesStatus('sent'));
 if (elements.manualSaleOpen) elements.manualSaleOpen.addEventListener('click', openManualSaleModal);
+if (elements.rescan) {
+  elements.rescan.addEventListener('click', async () => {
+    elements.rescan.disabled = true;
+    try {
+      const result = await rescanMails();
+      const added = result.added || 0;
+      const skippedText = result.skipped ? ' · scan déjà en cours' : '';
+      showToast(`Rescan terminé : ${added} nouvelle(s) vente(s)${skippedText}`);
+      await loadAndRender();
+    } catch (error) {
+      showToast(error.message, 'error');
+    } finally {
+      elements.rescan.disabled = false;
+    }
+  });
+}
+
 elements.poll.addEventListener('click', async () => {
   elements.poll.disabled = true;
   try {
