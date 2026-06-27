@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_24cc494f5eb0",
+    "sourceMessageId": "<0102019f09b0f098-e0536e37-bdab-416a-acfa-4d1c685c38b2-000000@eu-west-1.amazonses.com>",
+    "accountName": "emma_lvbc",
+    "buyerUsername": "charlievanmor",
+    "rawTitle": "Short Femme Vert Sauge Rayé Taille Haute Été Neuf",
+    "normalizedTitle": "short femme vert sauge raye taille haute ete neuf",
+    "priceCents": 800,
+    "priceFormatted": "8,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-27T15:26:58.000Z",
+    "createdAt": "2026-06-27T15:28:17.360Z",
+    "updatedAt": "2026-06-27T15:28:17.373Z"
+  },
+  {
     "id": "sale_8845a2f1bed8",
     "sourceMessageId": "<0102019f092666e4-22ec9e06-1413-42e7-8577-0c7c506ded28-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
@@ -10,11 +27,11 @@
     "priceFormatted": "7,20 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "prepared",
     "groupId": null,
     "soldAt": "2026-06-27T12:55:39.000Z",
     "createdAt": "2026-06-27T12:56:18.103Z",
-    "updatedAt": "2026-06-27T13:22:09.987Z"
+    "updatedAt": "2026-06-27T13:29:39.524Z"
   },
   {
     "id": "sale_99431c161eda",
@@ -27,11 +44,11 @@
     "priceFormatted": "18,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "prepared",
     "groupId": null,
     "soldAt": "2026-06-27T12:39:15.000Z",
     "createdAt": "2026-06-27T12:42:17.266Z",
-    "updatedAt": "2026-06-27T13:22:11.726Z"
+    "updatedAt": "2026-06-27T13:29:47.051Z"
   },
   {
     "id": "sale_a62c7ebf35bb",
