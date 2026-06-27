@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_8845a2f1bed8",
+    "sourceMessageId": "<0102019f092666e4-22ec9e06-1413-42e7-8577-0c7c506ded28-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "noella0358",
+    "rawTitle": "Short blanc d’été taille haute neuf pout femme",
+    "normalizedTitle": "short blanc d ete taille haute neuf pout femme",
+    "priceCents": 720,
+    "priceFormatted": "7,20 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-27T12:55:39.000Z",
+    "createdAt": "2026-06-27T12:56:18.103Z",
+    "updatedAt": "2026-06-27T12:56:18.115Z"
+  },
+  {
     "id": "sale_99431c161eda",
     "sourceMessageId": "<0102019f09176444-1e7a0bf9-8265-4c8a-9186-055001a58a30-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
