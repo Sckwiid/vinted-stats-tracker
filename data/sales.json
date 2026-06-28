@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_c0062a565267",
+    "sourceMessageId": "<0102019f0e4482ef-4c6386ec-e7e8-43bb-8927-b600e0a35520-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "ninatemplier2006",
+    "rawTitle": "Combishort bustier noir neuf pour femme",
+    "normalizedTitle": "combishort bustier noir neuf pour femme",
+    "priceCents": 2400,
+    "priceFormatted": "24,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-28T12:46:38.000Z",
+    "createdAt": "2026-06-28T12:48:17.960Z",
+    "updatedAt": "2026-06-28T12:48:17.972Z"
+  },
+  {
     "id": "sale_24cc494f5eb0",
     "sourceMessageId": "<0102019f09b0f098-e0536e37-bdab-416a-acfa-4d1c685c38b2-000000@eu-west-1.amazonses.com>",
     "accountName": "emma_lvbc",
