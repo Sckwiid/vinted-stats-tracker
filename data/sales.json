@@ -1,5 +1,22 @@
 [
   {
+    "id": "sale_d784661a5330",
+    "sourceMessageId": "<0102019f184f9747-1a0dd6e0-854f-4807-a26d-e3c165d3f029-000000@eu-west-1.amazonses.com>",
+    "accountName": "lila_lgt",
+    "buyerUsername": "herve406",
+    "rawTitle": "Combinaison short dos nu neuve pour femme",
+    "normalizedTitle": "combinaison short dos nu neuve pour femme",
+    "priceCents": 2000,
+    "priceFormatted": "20,00 €",
+    "currency": "EUR",
+    "imagePath": null,
+    "status": "todo",
+    "groupId": null,
+    "soldAt": "2026-06-30T11:34:57.000Z",
+    "createdAt": "2026-06-30T11:36:06.495Z",
+    "updatedAt": "2026-06-30T11:36:06.508Z"
+  },
+  {
     "id": "sale_c0062a565267",
     "sourceMessageId": "<0102019f0e4482ef-4c6386ec-e7e8-43bb-8927-b600e0a35520-000000@eu-west-1.amazonses.com>",
     "accountName": "lila_lgt",
