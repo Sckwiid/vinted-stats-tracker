@@ -27,11 +27,11 @@
     "priceFormatted": "24,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "prepared",
     "groupId": null,
     "soldAt": "2026-06-28T12:46:38.000Z",
     "createdAt": "2026-06-28T12:48:17.960Z",
-    "updatedAt": "2026-06-28T12:48:17.972Z"
+    "updatedAt": "2026-06-30T16:49:59.798Z"
   },
   {
     "id": "sale_24cc494f5eb0",
@@ -435,11 +435,11 @@
     "priceFormatted": "5,40 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-18T17:31:31.000Z",
     "createdAt": "2026-06-27T12:42:16.823Z",
-    "updatedAt": "2026-06-27T13:22:52.508Z"
+    "updatedAt": "2026-06-30T16:54:58.365Z"
   },
   {
     "id": "sale_0efff770d648",
@@ -452,11 +452,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-17T16:14:11.000Z",
     "createdAt": "2026-06-27T12:42:16.800Z",
-    "updatedAt": "2026-06-27T13:22:55.977Z"
+    "updatedAt": "2026-06-30T16:54:15.428Z"
   },
   {
     "id": "sale_4cddd932c682",
@@ -469,11 +469,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-17T12:56:01.000Z",
     "createdAt": "2026-06-27T12:42:16.782Z",
-    "updatedAt": "2026-06-27T13:22:50.071Z"
+    "updatedAt": "2026-06-30T16:53:53.731Z"
   },
   {
     "id": "sale_b6cdd388cbc3",
@@ -486,11 +486,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-17T12:00:22.000Z",
     "createdAt": "2026-06-27T12:42:16.764Z",
-    "updatedAt": "2026-06-27T13:22:51.751Z"
+    "updatedAt": "2026-06-30T16:53:21.630Z"
   },
   {
     "id": "sale_d263c73d55b2",
@@ -503,11 +503,11 @@
     "priceFormatted": "15,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T20:08:02.000Z",
     "createdAt": "2026-06-27T12:42:16.747Z",
-    "updatedAt": "2026-06-27T13:22:53.292Z"
+    "updatedAt": "2026-06-30T16:53:16.296Z"
   },
   {
     "id": "sale_71747db3336f",
@@ -520,11 +520,11 @@
     "priceFormatted": "5,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T19:57:01.000Z",
     "createdAt": "2026-06-27T12:42:16.729Z",
-    "updatedAt": "2026-06-27T13:22:54.902Z"
+    "updatedAt": "2026-06-30T16:53:18.588Z"
   },
   {
     "id": "sale_63be4ea5a03b",
@@ -537,11 +537,11 @@
     "priceFormatted": "15,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T14:23:45.000Z",
     "createdAt": "2026-06-27T12:42:16.711Z",
-    "updatedAt": "2026-06-27T13:22:56.425Z"
+    "updatedAt": "2026-06-30T16:52:39.315Z"
   },
   {
     "id": "sale_75c15fcb45de",
@@ -554,11 +554,11 @@
     "priceFormatted": "6,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T14:07:43.000Z",
     "createdAt": "2026-06-27T12:42:16.694Z",
-    "updatedAt": "2026-06-27T13:22:57.997Z"
+    "updatedAt": "2026-06-30T16:52:31.370Z"
   },
   {
     "id": "sale_6afbf93116a2",
@@ -571,11 +571,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T10:23:33.000Z",
     "createdAt": "2026-06-27T12:42:16.676Z",
-    "updatedAt": "2026-06-27T12:42:16.688Z"
+    "updatedAt": "2026-06-30T16:52:27.220Z"
   },
   {
     "id": "sale_80e147fcc5c0",
@@ -588,11 +588,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-15T05:45:02.000Z",
     "createdAt": "2026-06-27T12:42:16.659Z",
-    "updatedAt": "2026-06-27T12:42:16.671Z"
+    "updatedAt": "2026-06-30T16:52:22.522Z"
   },
   {
     "id": "sale_ab1c188877c4",
@@ -605,11 +605,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-14T20:51:04.000Z",
     "createdAt": "2026-06-27T12:42:16.640Z",
-    "updatedAt": "2026-06-27T12:42:16.653Z"
+    "updatedAt": "2026-06-30T16:52:18.698Z"
   },
   {
     "id": "sale_bf3024ee48da",
@@ -622,11 +622,11 @@
     "priceFormatted": "5,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-14T15:12:44.000Z",
     "createdAt": "2026-06-27T12:42:16.623Z",
-    "updatedAt": "2026-06-27T12:42:16.635Z"
+    "updatedAt": "2026-06-30T16:52:12.935Z"
   },
   {
     "id": "sale_2f77d2227335",
@@ -639,11 +639,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-13T10:39:11.000Z",
     "createdAt": "2026-06-27T12:42:16.603Z",
-    "updatedAt": "2026-06-27T12:42:16.615Z"
+    "updatedAt": "2026-06-30T16:52:09.278Z"
   },
   {
     "id": "sale_2c1300cfbc84",
@@ -656,11 +656,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-13T10:39:07.000Z",
     "createdAt": "2026-06-27T12:42:16.585Z",
-    "updatedAt": "2026-06-27T12:42:16.599Z"
+    "updatedAt": "2026-06-30T16:52:05.663Z"
   },
   {
     "id": "sale_19f4a043877a",
@@ -673,11 +673,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-12T20:58:29.000Z",
     "createdAt": "2026-06-27T12:42:16.561Z",
-    "updatedAt": "2026-06-27T12:42:16.574Z"
+    "updatedAt": "2026-06-30T16:51:59.180Z"
   },
   {
     "id": "sale_4f136b9c9ec7",
@@ -690,11 +690,11 @@
     "priceFormatted": "7,20 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-12T19:17:40.000Z",
     "createdAt": "2026-06-27T12:42:16.543Z",
-    "updatedAt": "2026-06-27T12:42:16.555Z"
+    "updatedAt": "2026-06-30T16:51:09.349Z"
   },
   {
     "id": "sale_b5e654c3d029",
@@ -707,11 +707,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-12T15:24:08.000Z",
     "createdAt": "2026-06-27T12:42:16.488Z",
-    "updatedAt": "2026-06-27T12:42:16.534Z"
+    "updatedAt": "2026-06-30T16:51:00.194Z"
   },
   {
     "id": "sale_d12543c9973b",
@@ -724,11 +724,11 @@
     "priceFormatted": "14,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-12T12:03:49.000Z",
     "createdAt": "2026-06-27T12:42:16.467Z",
-    "updatedAt": "2026-06-27T12:42:16.479Z"
+    "updatedAt": "2026-06-30T16:50:29.229Z"
   },
   {
     "id": "sale_b2e540d365c0",
@@ -741,11 +741,11 @@
     "priceFormatted": "30,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-12T06:56:49.000Z",
     "createdAt": "2026-06-27T12:42:16.449Z",
-    "updatedAt": "2026-06-27T12:42:16.460Z"
+    "updatedAt": "2026-06-30T16:50:25.419Z"
   },
   {
     "id": "sale_5ee061ee0aca",
@@ -758,11 +758,11 @@
     "priceFormatted": "12,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-11T10:29:55.000Z",
     "createdAt": "2026-06-27T12:42:16.430Z",
-    "updatedAt": "2026-06-27T12:42:16.443Z"
+    "updatedAt": "2026-06-30T16:50:22.032Z"
   },
   {
     "id": "sale_10f10af1eb5c",
@@ -775,11 +775,11 @@
     "priceFormatted": "10,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-09T13:03:24.000Z",
     "createdAt": "2026-06-27T12:42:16.405Z",
-    "updatedAt": "2026-06-27T12:42:16.418Z"
+    "updatedAt": "2026-06-30T16:50:19.710Z"
   },
   {
     "id": "sale_9551a6b2e7eb",
@@ -792,11 +792,11 @@
     "priceFormatted": "18,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-08T13:39:45.000Z",
     "createdAt": "2026-06-27T12:42:16.387Z",
-    "updatedAt": "2026-06-27T12:42:16.399Z"
+    "updatedAt": "2026-06-30T16:50:15.642Z"
   },
   {
     "id": "sale_be917eb86fe9",
@@ -809,10 +809,10 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "todo",
+    "status": "finished",
     "groupId": null,
     "soldAt": "2026-06-07T22:50:10.000Z",
     "createdAt": "2026-06-27T12:42:16.307Z",
-    "updatedAt": "2026-06-27T12:42:16.382Z"
+    "updatedAt": "2026-06-30T16:50:14.740Z"
   }
 ]
