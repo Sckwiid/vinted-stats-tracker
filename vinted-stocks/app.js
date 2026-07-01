@@ -63,6 +63,7 @@ const refs = {
   sessionBadge: document.getElementById("sessionBadge"),
   syncBadge: document.getElementById("syncBadge"),
   manualSyncBtn: document.getElementById("manualSyncBtn"),
+  exportStockBtn: document.getElementById("exportStockBtn"),
   goAddBtn: document.getElementById("goAddBtn"),
   deleteAllBtn: document.getElementById("deleteAllBtn"),
   homeView: document.getElementById("homeView"),
@@ -123,6 +124,7 @@ function bindEvents() {
   refs.manualSyncBtn.addEventListener("click", () => {
     void manualSyncProducts();
   });
+  refs.exportStockBtn.addEventListener("click", exportStockJson);
   refs.deleteAllBtn.addEventListener("click", () => {
     void deleteAllProducts();
   });
@@ -658,34 +660,42 @@ function importTemuItems(items) {
     const existingProduct = findExistingTemuProduct(item);
 
     if (existingProduct) {
-      existingProduct.totalStock = Math.max(0, Number(existingProduct.totalStock || 0)) + item.quantity;
+      existingProduct.totalStock = item.stockExport
+        ? item.quantity
+        : Math.max(0, Number(existingProduct.totalStock || 0)) + item.quantity;
       existingProduct.purchasePrice = item.purchasePrice !== null ? item.purchasePrice : existingProduct.purchasePrice;
       existingProduct.articleLink = item.productUrl || item.orderPageUrl || existingProduct.articleLink;
-      existingProduct.images = mergeProductImages(existingProduct, item.imageUrl ? [item.imageUrl] : []);
+      existingProduct.images = mergeProductImages(existingProduct, item.images.length > 0 ? item.images : []);
       existingProduct.photo = existingProduct.images[0] || "";
+      existingProduct.listedQuantity = item.listedQuantity !== null
+        ? Math.min(item.listedQuantity, existingProduct.totalStock)
+        : existingProduct.listedQuantity;
+      existingProduct.listedBy = item.listedBy || existingProduct.listedBy;
+      existingProduct.lowThreshold = item.lowThreshold !== null ? item.lowThreshold : existingProduct.lowThreshold;
+      existingProduct.saleHistory = item.saleHistory.length > 0 ? item.saleHistory : existingProduct.saleHistory;
       existingProduct.temu = buildTemuMeta(existingProduct.temu, item, now);
-      existingProduct.updatedAt = now;
+      existingProduct.updatedAt = item.updatedAt || now;
       updated += 1;
       continue;
     }
 
-    const images = item.imageUrl ? [item.imageUrl] : [];
+    const images = item.images.length > 0 ? item.images : (item.imageUrl ? [item.imageUrl] : []);
     const product = {
-      id: makeId(),
+      id: item.stockProductId || makeId(),
       name: item.title || "Article Temu",
       totalStock: item.quantity,
-      listedQuantity: 0,
-      listedBy: "",
-      lowThreshold: DEFAULT_LOW_THRESHOLD,
+      listedQuantity: Math.min(item.listedQuantity || 0, item.quantity),
+      listedBy: item.listedBy || "",
+      lowThreshold: item.lowThreshold !== null ? item.lowThreshold : DEFAULT_LOW_THRESHOLD,
       purchasePrice: item.purchasePrice,
       articleLink: item.productUrl || item.orderPageUrl || "",
       photo: images[0] || "",
       images,
-      saleHistory: [],
+      saleHistory: item.saleHistory,
       temu: buildTemuMeta({}, item, now),
       createdBy: state.user.username,
-      createdAt: now,
-      updatedAt: now
+      createdAt: item.createdAt || now,
+      updatedAt: item.updatedAt || now
     };
 
     state.products.unshift(product);
@@ -701,13 +711,14 @@ function normalizeTemuImportPayload(payload) {
     : Array.isArray(payload && payload.items)
       ? payload.items
       : [];
+  const isStockExport = Boolean(payload && payload.source === "vinted-stocks-export");
 
   return rawItems
-    .map(normalizeTemuImportItem)
+    .map((rawItem) => normalizeTemuImportItem(rawItem, { isStockExport }))
     .filter(Boolean);
 }
 
-function normalizeTemuImportItem(rawItem) {
+function normalizeTemuImportItem(rawItem, options = {}) {
   if (!rawItem || typeof rawItem !== "object") {
     return null;
   }
@@ -719,12 +730,15 @@ function normalizeTemuImportItem(rawItem) {
       || rawItem.itemTitle
       || ""
   ).trim();
-  const quantity = parsePositiveInteger(
-    rawItem.quantity
-      || rawItem.qty
-      || rawItem.count
-      || 1
-  );
+  const isStockExport = Boolean(options.isStockExport || rawItem.stockExport);
+  const quantity = isStockExport
+    ? (parseOptionalStockInteger(rawItem.quantity ?? rawItem.qty ?? rawItem.count ?? null) ?? 0)
+    : parsePositiveInteger(
+      rawItem.quantity
+        || rawItem.qty
+        || rawItem.count
+        || 1
+    );
   const purchasePrice = parseMoneyValue(
     rawItem.purchasePrice
       ?? rawItem.unitPurchasePrice
@@ -740,7 +754,8 @@ function normalizeTemuImportItem(rawItem) {
       || ""
   );
   const orderPageUrl = normalizeOptionalHttpUrl(rawItem.orderPageUrl || rawItem.pageUrl || "");
-  const imageUrl = normalizeOptionalImageUrl(
+  const images = normalizeImportImages(rawItem);
+  const imageUrl = images[0] || normalizeOptionalImageUrl(
     rawItem.imageUrl
       || rawItem.image
       || rawItem.photo
@@ -765,13 +780,29 @@ function normalizeTemuImportItem(rawItem) {
     productUrl,
     orderPageUrl,
     imageUrl,
+    images: [...new Set([imageUrl, ...images].filter(Boolean))],
     orderId: String(rawItem.orderId || rawItem.orderNumber || "").trim(),
     orderDate: String(rawItem.orderDate || rawItem.date || "").trim(),
     variant,
     color,
     importKey: String(rawItem.importKey || "").trim(),
-    currency: String(rawItem.currency || "EUR").trim() || "EUR"
+    currency: String(rawItem.currency || "EUR").trim() || "EUR",
+    stockExport: isStockExport,
+    stockProductId: String(rawItem.stockProductId || rawItem.productId || rawItem.id || "").trim(),
+    listedQuantity: parseOptionalStockInteger(rawItem.listedQuantity ?? rawItem.stockListed ?? null),
+    listedBy: normalizeListedByValue(rawItem.listedBy || rawItem.listedBySellers || ""),
+    lowThreshold: parseOptionalStockInteger(rawItem.lowThreshold ?? rawItem.stockLowThreshold ?? null),
+    saleHistory: normalizeSaleHistory(rawItem.saleHistory),
+    createdAt: String(rawItem.createdAt || "").trim(),
+    updatedAt: String(rawItem.updatedAt || "").trim()
   };
+}
+
+function normalizeImportImages(rawItem) {
+  const rawImages = Array.isArray(rawItem.images) ? rawItem.images : [];
+  return rawImages
+    .map(normalizeOptionalImageUrl)
+    .filter(Boolean);
 }
 
 function isInvalidTemuImportTitle(title) {
@@ -789,6 +820,14 @@ function isInvalidTemuImportTitle(title) {
 }
 
 function findExistingTemuProduct(item) {
+  if (item.stockExport && item.stockProductId) {
+    const byStockProductId = state.products.find((product) => product.id === item.stockProductId);
+
+    if (byStockProductId) {
+      return byStockProductId;
+    }
+  }
+
   if (item.importKey) {
     const byImportKey = state.products.find((product) => {
       return product.temu && product.temu.importKey === item.importKey;
@@ -1998,6 +2037,71 @@ function persistProductsCache() {
   localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(state.products));
 }
 
+function exportStockJson() {
+  if (state.products.length === 0) {
+    showStatus("Aucun article a exporter.", "error");
+    return;
+  }
+
+  const exportedAt = new Date().toISOString();
+  const payload = {
+    source: "vinted-stocks-export",
+    schemaVersion: 1,
+    exportedAt,
+    itemCount: state.products.length,
+    items: state.products.map((product) => createStockExportItem(product))
+  };
+
+  downloadJsonFile(payload, `vinted-stock-export-${exportedAt.slice(0, 10)}.json`);
+  showStatus(`${state.products.length} article(s) exporte(s) au format JSON.`, "info");
+}
+
+function createStockExportItem(product) {
+  const images = getProductImages(product);
+  const temu = product.temu && typeof product.temu === "object" ? product.temu : {};
+  const productUrl = temu.productUrl || (isTemuProductUrl(product.articleLink) ? product.articleLink : "");
+  const orderPageUrl = temu.orderPageUrl || (isTemuOrderUrl(product.articleLink) ? product.articleLink : "");
+  const listedSellers = normalizeListedSellers(product.listedBy);
+
+  return {
+    stockExport: true,
+    stockProductId: product.id,
+    title: product.name,
+    quantity: Math.max(0, Number(product.totalStock || 0)),
+    listedQuantity: Math.max(0, Number(product.listedQuantity || 0)),
+    listedBy: product.listedBy || "",
+    listedBySellers: listedSellers,
+    lowThreshold: Math.max(0, Number(product.lowThreshold || DEFAULT_LOW_THRESHOLD)),
+    purchasePrice: product.purchasePrice,
+    currency: temu.currency || "EUR",
+    imageUrl: images[0] || temu.imageUrl || "",
+    images,
+    productUrl,
+    articleLink: product.articleLink || productUrl || orderPageUrl || "",
+    orderPageUrl,
+    orderId: temu.orderId || "",
+    orderDate: temu.orderDate || "",
+    variant: temu.variant || "",
+    color: temu.color || "",
+    importKey: temu.importKey || `stock-${product.id}`,
+    saleHistory: product.saleHistory || [],
+    createdAt: product.createdAt || "",
+    updatedAt: product.updatedAt || ""
+  };
+}
+
+function downloadJsonFile(payload, filename) {
+  const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 function getSyncConfig() {
   const sync = window.APP_CONFIG && window.APP_CONFIG.sync ? window.APP_CONFIG.sync : null;
   if (!sync || !sync.enabled) {
@@ -2462,6 +2566,15 @@ function parsePositiveInteger(value) {
   const match = String(value || "").match(/\d+/);
   const quantity = match ? Number(match[0]) : Number(value);
   return Number.isFinite(quantity) && quantity > 0 ? Math.floor(quantity) : 1;
+}
+
+function parseOptionalStockInteger(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  const quantity = Number(value);
+  return Number.isFinite(quantity) && quantity >= 0 ? Math.floor(quantity) : null;
 }
 
 function normalizeOptionalHttpUrl(value) {

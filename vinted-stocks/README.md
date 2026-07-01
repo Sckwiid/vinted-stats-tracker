@@ -227,6 +227,14 @@ Champs obligatoires par article:
 L'import fusionne avec un article existant si `importKey` correspond deja, ou si le vrai lien produit Temu correspond deja.
 Le lien de page commande (`orderPageUrl`) est affiche, mais il n'est pas utilise pour fusionner les articles.
 
+## Export stock JSON
+
+Depuis la page Stocks, le bouton `Exporter JSON` telecharge un fichier `vinted-stock-export-YYYY-MM-DD.json`.
+
+Ce fichier utilise le meme flux que l'import JSON: ouvre le nouvel hebergeur, va dans `Modifier les stocks`, selectionne ce fichier dans `Fichier export Temu`, verifie les cartes, puis clique `Valider l'import`.
+
+Le JSON exporte contient `source: "vinted-stocks-export"`, `schemaVersion`, `exportedAt` et un tableau `items`. Chaque item garde les champs compatibles import (`title`, `purchasePrice`, `quantity`, `imageUrl`, `images`, `productUrl`, `orderPageUrl`, `variant`, `color`, `importKey`, `currency`) ainsi que les champs stock (`stockProductId`, `listedQuantity`, `listedBy`, `lowThreshold`, `saleHistory`, `createdAt`, `updatedAt`) pour conserver le stock au plus proche lors d'une migration.
+
 ## Securite
 
 L'URL de l'API Netlify est publique, mais:

@@ -1,294 +1,5 @@
 [
   {
-    "id": "sale_d784661a5330",
-    "sourceMessageId": "<0102019f184f9747-1a0dd6e0-854f-4807-a26d-e3c165d3f029-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "herve406",
-    "rawTitle": "Combinaison short dos nu neuve pour femme",
-    "normalizedTitle": "combinaison short dos nu neuve pour femme",
-    "priceCents": 2000,
-    "priceFormatted": "20,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "todo",
-    "groupId": null,
-    "soldAt": "2026-06-30T11:34:57.000Z",
-    "createdAt": "2026-06-30T11:36:06.495Z",
-    "updatedAt": "2026-06-30T11:36:06.508Z"
-  },
-  {
-    "id": "sale_c0062a565267",
-    "sourceMessageId": "<0102019f0e4482ef-4c6386ec-e7e8-43bb-8927-b600e0a35520-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "ninatemplier2006",
-    "rawTitle": "Combishort bustier noir neuf pour femme",
-    "normalizedTitle": "combishort bustier noir neuf pour femme",
-    "priceCents": 2400,
-    "priceFormatted": "24,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "prepared",
-    "groupId": null,
-    "soldAt": "2026-06-28T12:46:38.000Z",
-    "createdAt": "2026-06-28T12:48:17.960Z",
-    "updatedAt": "2026-06-30T16:49:59.798Z"
-  },
-  {
-    "id": "sale_24cc494f5eb0",
-    "sourceMessageId": "<0102019f09b0f098-e0536e37-bdab-416a-acfa-4d1c685c38b2-000000@eu-west-1.amazonses.com>",
-    "accountName": "emma_lvbc",
-    "buyerUsername": "charlievanmor",
-    "rawTitle": "Short Femme Vert Sauge Rayé Taille Haute Été Neuf",
-    "normalizedTitle": "short femme vert sauge raye taille haute ete neuf",
-    "priceCents": 800,
-    "priceFormatted": "8,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-27T15:26:58.000Z",
-    "createdAt": "2026-06-27T15:28:17.360Z",
-    "updatedAt": "2026-06-30T16:32:06.159Z"
-  },
-  {
-    "id": "sale_8845a2f1bed8",
-    "sourceMessageId": "<0102019f092666e4-22ec9e06-1413-42e7-8577-0c7c506ded28-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "noella0358",
-    "rawTitle": "Short blanc d’été taille haute neuf pout femme",
-    "normalizedTitle": "short blanc d ete taille haute neuf pout femme",
-    "priceCents": 720,
-    "priceFormatted": "7,20 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-27T12:55:39.000Z",
-    "createdAt": "2026-06-27T12:56:18.103Z",
-    "updatedAt": "2026-06-30T16:31:51.326Z"
-  },
-  {
-    "id": "sale_99431c161eda",
-    "sourceMessageId": "<0102019f09176444-1e7a0bf9-8265-4c8a-9186-055001a58a30-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "clems2226",
-    "rawTitle": "Ensemble débardeur + short neuf pour femme",
-    "normalizedTitle": "ensemble debardeur short neuf pour femme",
-    "priceCents": 1800,
-    "priceFormatted": "18,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-27T12:39:15.000Z",
-    "createdAt": "2026-06-27T12:42:17.266Z",
-    "updatedAt": "2026-06-30T16:31:34.714Z"
-  },
-  {
-    "id": "sale_a62c7ebf35bb",
-    "sourceMessageId": "<0102019f052dedb2-b6237018-7a8d-4e4e-a492-19cc0f23ae5a-000000@eu-west-1.amazonses.com>",
-    "accountName": "chloe_lsv",
-    "buyerUsername": "sophie15111991",
-    "rawTitle": "Ensemble short taille haute et top bandeau rayé crochet d’été pour femme",
-    "normalizedTitle": "ensemble short taille haute et top bandeau raye crochet d ete pour femme",
-    "priceCents": 2000,
-    "priceFormatted": "20,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-26T18:25:23.000Z",
-    "createdAt": "2026-06-27T12:42:17.247Z",
-    "updatedAt": "2026-06-27T13:22:13.459Z"
-  },
-  {
-    "id": "sale_332416f93b77",
-    "sourceMessageId": "<0102019f05176cee-e2726a3f-d799-47e8-8bf7-c456dfe29d0e-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "carinelps",
-    "rawTitle": "Combinaison short noire sans bretelles neuve pour femme",
-    "normalizedTitle": "combinaison short noire sans bretelles neuve pour femme",
-    "priceCents": 1800,
-    "priceFormatted": "18,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-26T18:00:49.000Z",
-    "createdAt": "2026-06-27T12:42:17.228Z",
-    "updatedAt": "2026-06-27T13:22:15.220Z"
-  },
-  {
-    "id": "sale_241eabc8169c",
-    "sourceMessageId": "<0102019f03c9c90c-86c12c28-61d3-4a7a-8793-c599847a1ec3-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "jess160208",
-    "rawTitle": "Robe longue moulante neuf noire fendue pour femme",
-    "normalizedTitle": "robe longue moulante neuf noire fendue pour femme",
-    "priceCents": 2500,
-    "priceFormatted": "25,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-26T11:56:23.000Z",
-    "createdAt": "2026-06-27T12:42:17.210Z",
-    "updatedAt": "2026-06-27T13:22:16.869Z"
-  },
-  {
-    "id": "sale_c82d25d05853",
-    "sourceMessageId": "<0102019f03b1a9aa-8e351b95-ce5a-4ee0-9b18-7833e8133121-000000@eu-west-1.amazonses.com>",
-    "accountName": "chloe_lsv",
-    "buyerUsername": "viooleta8912",
-    "rawTitle": "Top marron côtelé style halter d’été pour femme",
-    "normalizedTitle": "top marron cotele style halter d ete pour femme",
-    "priceCents": 1000,
-    "priceFormatted": "10,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-26T11:30:02.000Z",
-    "createdAt": "2026-06-27T12:42:17.193Z",
-    "updatedAt": "2026-06-27T13:22:18.583Z"
-  },
-  {
-    "id": "sale_622dd181df32",
-    "sourceMessageId": "<0102019f028778b0-45518a7a-66e2-4dd9-bb2a-1fb4bd2d42e6-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "elisebruni",
-    "rawTitle": "Robe noire neuf à col montant sans manches pour femme",
-    "normalizedTitle": "robe noire neuf a col montant sans manches pour femme",
-    "priceCents": 2300,
-    "priceFormatted": "23,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-26T06:04:20.000Z",
-    "createdAt": "2026-06-27T12:42:17.173Z",
-    "updatedAt": "2026-06-27T13:22:20.316Z"
-  },
-  {
-    "id": "sale_30351d864ee0",
-    "sourceMessageId": "<0102019eff5c2fb5-5cba9fc5-901a-4edb-8c0e-b1fbee437b95-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "denisebennett",
-    "rawTitle": "Ensemble short beige et top d’été neuf pour femme",
-    "normalizedTitle": "ensemble short beige et top d ete neuf pour femme",
-    "priceCents": 1850,
-    "priceFormatted": "18,50 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-25T15:18:12.000Z",
-    "createdAt": "2026-06-27T12:42:17.148Z",
-    "updatedAt": "2026-06-27T13:22:22.057Z"
-  },
-  {
-    "id": "sale_35fe6963eb84",
-    "sourceMessageId": "<0102019efe9221dc-88e85aa2-20af-44b7-aabc-301f81dc8b60-000000@eu-west-1.amazonses.com>",
-    "accountName": "chloe_lsv",
-    "buyerUsername": "laurence4815",
-    "rawTitle": "Chemise blanche manches courtes d’été pour femme",
-    "normalizedTitle": "chemise blanche manches courtes d ete pour femme",
-    "priceCents": 1200,
-    "priceFormatted": "12,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-25T11:37:30.000Z",
-    "createdAt": "2026-06-27T12:42:17.129Z",
-    "updatedAt": "2026-06-27T13:22:23.801Z"
-  },
-  {
-    "id": "sale_d27fc9867151",
-    "sourceMessageId": "<0102019efa492746-681d4e86-5c85-4d85-a9ac-69f4f2c38407-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "kc-1971",
-    "rawTitle": "Ensemble beige top et short neuf pour femme",
-    "normalizedTitle": "ensemble beige top et short neuf pour femme",
-    "priceCents": 2000,
-    "priceFormatted": "20,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-24T15:39:18.000Z",
-    "createdAt": "2026-06-27T12:42:17.107Z",
-    "updatedAt": "2026-06-27T13:22:25.641Z"
-  },
-  {
-    "id": "sale_cd3677ebb346",
-    "sourceMessageId": "<0102019efa138ba1-d88dd8ae-be6e-4c83-9e31-127990bb094b-000000@eu-west-1.amazonses.com>",
-    "accountName": "chloe_lsv",
-    "buyerUsername": "nini130986",
-    "rawTitle": "Combishort léopard sans bretelles été - pour femme",
-    "normalizedTitle": "combishort leopard sans bretelles ete pour femme",
-    "priceCents": 700,
-    "priceFormatted": "7,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-24T14:40:45.000Z",
-    "createdAt": "2026-06-27T12:42:17.088Z",
-    "updatedAt": "2026-06-27T13:22:27.385Z"
-  },
-  {
-    "id": "sale_55e653dbdcbe",
-    "sourceMessageId": "<0102019ef58fea36-da3e0165-bded-4ea4-9820-f9030b26e22d-000000@eu-west-1.amazonses.com>",
-    "accountName": "chloe_lsv",
-    "buyerUsername": "faure-alice",
-    "rawTitle": "Lot 2 articles",
-    "normalizedTitle": "lot 2 articles",
-    "priceCents": 2400,
-    "priceFormatted": "24,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-23T17:38:30.000Z",
-    "createdAt": "2026-06-27T12:42:17.034Z",
-    "updatedAt": "2026-06-27T13:22:28.991Z"
-  },
-  {
-    "id": "sale_2bbf25d35e54",
-    "sourceMessageId": "<0102019ef4cae503-31e2f111-0186-435a-af66-893e5fd6de4c-000000@eu-west-1.amazonses.com>",
-    "accountName": "emma_lvbc",
-    "buyerUsername": "toutiiiiiiiiiiiii",
-    "rawTitle": "Ensemble jupe et débardeur d’été effet crochet beige blanc",
-    "normalizedTitle": "ensemble jupe et debardeur d ete effet crochet beige blanc",
-    "priceCents": 2000,
-    "priceFormatted": "20,00 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-23T14:03:18.000Z",
-    "createdAt": "2026-06-27T12:42:17.016Z",
-    "updatedAt": "2026-06-27T13:22:30.639Z"
-  },
-  {
-    "id": "sale_78406a718524",
-    "sourceMessageId": "<0102019ef058d64c-7f61ec1a-f852-4185-8e4b-9178a96c0560-000000@eu-west-1.amazonses.com>",
-    "accountName": "lila_lgt",
-    "buyerUsername": "yuka1234",
-    "rawTitle": "Lot 2 articles",
-    "normalizedTitle": "lot 2 articles",
-    "priceCents": 1440,
-    "priceFormatted": "14,40 €",
-    "currency": "EUR",
-    "imagePath": null,
-    "status": "sent",
-    "groupId": null,
-    "soldAt": "2026-06-22T17:20:14.000Z",
-    "createdAt": "2026-06-27T12:42:16.998Z",
-    "updatedAt": "2026-06-27T13:22:32.337Z"
-  },
-  {
     "id": "sale_1fc9e60cd0b8",
     "sourceMessageId": "<0102019eeb741c6b-a645b144-9040-4206-a64e-272ba8f8a9bc-000000@eu-west-1.amazonses.com>",
     "accountName": "emma_lvbc",
@@ -299,11 +10,11 @@
     "priceFormatted": "30,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-21T18:31:55.000Z",
-    "createdAt": "2026-06-27T12:42:16.980Z",
-    "updatedAt": "2026-06-27T13:22:34.058Z"
+    "createdAt": "2026-06-21T18:35:22.981Z",
+    "updatedAt": "2026-06-21T18:35:22.995Z"
   },
   {
     "id": "sale_8b6bd410829a",
@@ -316,11 +27,11 @@
     "priceFormatted": "10,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-21T15:21:20.000Z",
-    "createdAt": "2026-06-27T12:42:16.963Z",
-    "updatedAt": "2026-06-27T13:22:35.689Z"
+    "createdAt": "2026-06-21T18:35:22.962Z",
+    "updatedAt": "2026-06-21T18:35:22.976Z"
   },
   {
     "id": "sale_fa840f50d56c",
@@ -333,11 +44,11 @@
     "priceFormatted": "19,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-21T13:17:26.000Z",
-    "createdAt": "2026-06-27T12:42:16.938Z",
-    "updatedAt": "2026-06-27T13:22:37.308Z"
+    "createdAt": "2026-06-21T18:35:22.940Z",
+    "updatedAt": "2026-06-21T18:35:22.956Z"
   },
   {
     "id": "sale_7396ba7c46f7",
@@ -350,11 +61,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-21T10:36:18.000Z",
-    "createdAt": "2026-06-27T12:42:16.921Z",
-    "updatedAt": "2026-06-27T13:22:38.926Z"
+    "createdAt": "2026-06-21T18:35:22.920Z",
+    "updatedAt": "2026-06-21T18:35:22.934Z"
   },
   {
     "id": "sale_30f243d9c949",
@@ -367,11 +78,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-20T15:52:23.000Z",
-    "createdAt": "2026-06-27T12:42:16.903Z",
-    "updatedAt": "2026-06-27T13:22:40.603Z"
+    "createdAt": "2026-06-21T18:35:22.902Z",
+    "updatedAt": "2026-06-21T18:35:22.916Z"
   },
   {
     "id": "sale_a1c6e549bf55",
@@ -384,11 +95,11 @@
     "priceFormatted": "12,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-20T13:51:11.000Z",
-    "createdAt": "2026-06-27T12:42:16.887Z",
-    "updatedAt": "2026-06-27T13:22:42.183Z"
+    "createdAt": "2026-06-21T18:35:22.879Z",
+    "updatedAt": "2026-06-21T18:35:22.897Z"
   },
   {
     "id": "sale_7fab82a863ed",
@@ -401,11 +112,11 @@
     "priceFormatted": "7,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-18T21:08:48.000Z",
-    "createdAt": "2026-06-27T12:42:16.861Z",
-    "updatedAt": "2026-06-27T13:22:45.545Z"
+    "createdAt": "2026-06-21T18:35:22.855Z",
+    "updatedAt": "2026-06-21T18:35:22.869Z"
   },
   {
     "id": "sale_11a0873de335",
@@ -418,11 +129,11 @@
     "priceFormatted": "19,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "sent",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-18T18:31:46.000Z",
-    "createdAt": "2026-06-27T12:42:16.840Z",
-    "updatedAt": "2026-06-27T13:22:49.034Z"
+    "createdAt": "2026-06-21T18:35:22.829Z",
+    "updatedAt": "2026-06-21T18:35:22.847Z"
   },
   {
     "id": "sale_8c9fd317aafb",
@@ -435,11 +146,11 @@
     "priceFormatted": "5,40 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-18T17:31:31.000Z",
-    "createdAt": "2026-06-27T12:42:16.823Z",
-    "updatedAt": "2026-06-30T16:54:58.365Z"
+    "createdAt": "2026-06-21T18:35:22.804Z",
+    "updatedAt": "2026-06-21T18:35:22.820Z"
   },
   {
     "id": "sale_0efff770d648",
@@ -452,11 +163,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-17T16:14:11.000Z",
-    "createdAt": "2026-06-27T12:42:16.800Z",
-    "updatedAt": "2026-06-30T16:54:15.428Z"
+    "createdAt": "2026-06-21T18:35:22.779Z",
+    "updatedAt": "2026-06-21T18:35:22.793Z"
   },
   {
     "id": "sale_4cddd932c682",
@@ -469,11 +180,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-17T12:56:01.000Z",
-    "createdAt": "2026-06-27T12:42:16.782Z",
-    "updatedAt": "2026-06-30T16:53:53.731Z"
+    "createdAt": "2026-06-21T18:35:22.756Z",
+    "updatedAt": "2026-06-21T18:35:22.771Z"
   },
   {
     "id": "sale_b6cdd388cbc3",
@@ -486,11 +197,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-17T12:00:22.000Z",
-    "createdAt": "2026-06-27T12:42:16.764Z",
-    "updatedAt": "2026-06-30T16:53:21.630Z"
+    "createdAt": "2026-06-21T18:35:22.733Z",
+    "updatedAt": "2026-06-21T18:35:22.750Z"
   },
   {
     "id": "sale_d263c73d55b2",
@@ -503,11 +214,11 @@
     "priceFormatted": "15,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T20:08:02.000Z",
-    "createdAt": "2026-06-27T12:42:16.747Z",
-    "updatedAt": "2026-06-30T16:53:16.296Z"
+    "createdAt": "2026-06-21T18:35:22.715Z",
+    "updatedAt": "2026-06-21T18:35:22.728Z"
   },
   {
     "id": "sale_71747db3336f",
@@ -520,11 +231,11 @@
     "priceFormatted": "5,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T19:57:01.000Z",
-    "createdAt": "2026-06-27T12:42:16.729Z",
-    "updatedAt": "2026-06-30T16:53:18.588Z"
+    "createdAt": "2026-06-21T18:35:22.694Z",
+    "updatedAt": "2026-06-21T18:35:22.708Z"
   },
   {
     "id": "sale_63be4ea5a03b",
@@ -537,11 +248,11 @@
     "priceFormatted": "15,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T14:23:45.000Z",
-    "createdAt": "2026-06-27T12:42:16.711Z",
-    "updatedAt": "2026-06-30T16:52:39.315Z"
+    "createdAt": "2026-06-21T18:35:22.671Z",
+    "updatedAt": "2026-06-21T18:35:22.688Z"
   },
   {
     "id": "sale_75c15fcb45de",
@@ -554,11 +265,11 @@
     "priceFormatted": "6,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T14:07:43.000Z",
-    "createdAt": "2026-06-27T12:42:16.694Z",
-    "updatedAt": "2026-06-30T16:52:31.370Z"
+    "createdAt": "2026-06-21T18:35:22.652Z",
+    "updatedAt": "2026-06-21T18:35:22.667Z"
   },
   {
     "id": "sale_6afbf93116a2",
@@ -571,11 +282,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T10:23:33.000Z",
-    "createdAt": "2026-06-27T12:42:16.676Z",
-    "updatedAt": "2026-06-30T16:52:27.220Z"
+    "createdAt": "2026-06-21T18:35:22.632Z",
+    "updatedAt": "2026-06-21T18:35:22.646Z"
   },
   {
     "id": "sale_80e147fcc5c0",
@@ -588,11 +299,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-15T05:45:02.000Z",
-    "createdAt": "2026-06-27T12:42:16.659Z",
-    "updatedAt": "2026-06-30T16:52:22.522Z"
+    "createdAt": "2026-06-21T18:35:22.613Z",
+    "updatedAt": "2026-06-21T18:35:22.626Z"
   },
   {
     "id": "sale_ab1c188877c4",
@@ -605,11 +316,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-14T20:51:04.000Z",
-    "createdAt": "2026-06-27T12:42:16.640Z",
-    "updatedAt": "2026-06-30T16:52:18.698Z"
+    "createdAt": "2026-06-21T18:35:22.594Z",
+    "updatedAt": "2026-06-21T18:35:22.607Z"
   },
   {
     "id": "sale_bf3024ee48da",
@@ -622,11 +333,11 @@
     "priceFormatted": "5,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-14T15:12:44.000Z",
-    "createdAt": "2026-06-27T12:42:16.623Z",
-    "updatedAt": "2026-06-30T16:52:12.935Z"
+    "createdAt": "2026-06-21T18:35:22.572Z",
+    "updatedAt": "2026-06-21T18:35:22.587Z"
   },
   {
     "id": "sale_2f77d2227335",
@@ -639,11 +350,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-13T10:39:11.000Z",
-    "createdAt": "2026-06-27T12:42:16.603Z",
-    "updatedAt": "2026-06-30T16:52:09.278Z"
+    "createdAt": "2026-06-21T18:35:22.548Z",
+    "updatedAt": "2026-06-21T18:35:22.561Z"
   },
   {
     "id": "sale_2c1300cfbc84",
@@ -656,11 +367,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-13T10:39:07.000Z",
-    "createdAt": "2026-06-27T12:42:16.585Z",
-    "updatedAt": "2026-06-30T16:52:05.663Z"
+    "createdAt": "2026-06-21T18:35:22.526Z",
+    "updatedAt": "2026-06-21T18:35:22.540Z"
   },
   {
     "id": "sale_19f4a043877a",
@@ -673,11 +384,11 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-12T20:58:29.000Z",
-    "createdAt": "2026-06-27T12:42:16.561Z",
-    "updatedAt": "2026-06-30T16:51:59.180Z"
+    "createdAt": "2026-06-21T18:35:22.500Z",
+    "updatedAt": "2026-06-21T18:35:22.513Z"
   },
   {
     "id": "sale_4f136b9c9ec7",
@@ -690,11 +401,11 @@
     "priceFormatted": "7,20 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-12T19:17:40.000Z",
-    "createdAt": "2026-06-27T12:42:16.543Z",
-    "updatedAt": "2026-06-30T16:51:09.349Z"
+    "createdAt": "2026-06-21T18:35:22.477Z",
+    "updatedAt": "2026-06-21T18:35:22.491Z"
   },
   {
     "id": "sale_b5e654c3d029",
@@ -707,11 +418,11 @@
     "priceFormatted": "20,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-12T15:24:08.000Z",
-    "createdAt": "2026-06-27T12:42:16.488Z",
-    "updatedAt": "2026-06-30T16:51:00.194Z"
+    "createdAt": "2026-06-21T18:35:22.419Z",
+    "updatedAt": "2026-06-21T18:35:22.466Z"
   },
   {
     "id": "sale_d12543c9973b",
@@ -724,11 +435,11 @@
     "priceFormatted": "14,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-12T12:03:49.000Z",
-    "createdAt": "2026-06-27T12:42:16.467Z",
-    "updatedAt": "2026-06-30T16:50:29.229Z"
+    "createdAt": "2026-06-21T18:35:22.396Z",
+    "updatedAt": "2026-06-21T18:35:22.413Z"
   },
   {
     "id": "sale_b2e540d365c0",
@@ -741,11 +452,11 @@
     "priceFormatted": "30,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-12T06:56:49.000Z",
-    "createdAt": "2026-06-27T12:42:16.449Z",
-    "updatedAt": "2026-06-30T16:50:25.419Z"
+    "createdAt": "2026-06-21T18:35:22.374Z",
+    "updatedAt": "2026-06-21T18:35:22.390Z"
   },
   {
     "id": "sale_5ee061ee0aca",
@@ -758,11 +469,11 @@
     "priceFormatted": "12,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-11T10:29:55.000Z",
-    "createdAt": "2026-06-27T12:42:16.430Z",
-    "updatedAt": "2026-06-30T16:50:22.032Z"
+    "createdAt": "2026-06-21T18:35:22.353Z",
+    "updatedAt": "2026-06-21T18:35:22.368Z"
   },
   {
     "id": "sale_10f10af1eb5c",
@@ -775,11 +486,11 @@
     "priceFormatted": "10,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-09T13:03:24.000Z",
-    "createdAt": "2026-06-27T12:42:16.405Z",
-    "updatedAt": "2026-06-30T16:50:19.710Z"
+    "createdAt": "2026-06-21T18:35:22.333Z",
+    "updatedAt": "2026-06-21T18:35:22.347Z"
   },
   {
     "id": "sale_9551a6b2e7eb",
@@ -792,11 +503,11 @@
     "priceFormatted": "18,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-08T13:39:45.000Z",
-    "createdAt": "2026-06-27T12:42:16.387Z",
-    "updatedAt": "2026-06-30T16:50:15.642Z"
+    "createdAt": "2026-06-21T18:35:22.313Z",
+    "updatedAt": "2026-06-21T18:35:22.327Z"
   },
   {
     "id": "sale_be917eb86fe9",
@@ -809,10 +520,10 @@
     "priceFormatted": "8,00 €",
     "currency": "EUR",
     "imagePath": null,
-    "status": "finished",
+    "status": "todo",
     "groupId": null,
     "soldAt": "2026-06-07T22:50:10.000Z",
-    "createdAt": "2026-06-27T12:42:16.307Z",
-    "updatedAt": "2026-06-30T16:50:14.740Z"
+    "createdAt": "2026-06-21T18:35:22.213Z",
+    "updatedAt": "2026-06-21T18:35:22.307Z"
   }
 ]
